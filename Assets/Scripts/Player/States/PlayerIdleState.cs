@@ -10,11 +10,9 @@ public class PlayerIdleState : PlayerGroundState
     {
         base.OnUpdate();
 
-        if(controller.movementInput.sqrMagnitude > 0)
+        if(controller.MovementInput.sqrMagnitude > 0)
         {
             controller.ChangeState(controller.runState);
         }
-
-        
     }
 }
