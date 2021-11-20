@@ -24,7 +24,7 @@ public class PlayerGroundState : PlayerLookState
             controller.ChangeState(controller.jumpState);
             return;
         }
-        else if (controller.DashInput)
+        else if (controller.DashInput && controller.CanDash())
         {
             controller.ChangeState(controller.dashState);
         }

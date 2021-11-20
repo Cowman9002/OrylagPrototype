@@ -10,6 +10,9 @@ public class PlayerStats : ScriptableObject
     public float gravity;
     public float inputBufferTime;
 
+    [Header("Sounds")]
+    public AudioClip dashSound;
+
     [Header("Speeds")]
     public float movementSpeed;
     public float airSpeed;
@@ -31,6 +34,7 @@ public class PlayerStats : ScriptableObject
     public float groundFriction;
 
     [Header("Dash")]
+    public float dashCooldown;
     public AnimationCurve dashCurve;
     public float dashFovDelta;
     public float dashTime;

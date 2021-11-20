@@ -10,7 +10,7 @@ public class PlayerFallingState : PlayerInAirState
     {
         base.OnUpdate();
 
-        if(controller.DashInput)
+        if(controller.DashInput && controller.CanDash())
         {
             controller.ChangeState(controller.dashState);
         }
