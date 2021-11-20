@@ -6,21 +6,25 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public PlayerStats playerStats;
-    public Transform viewCamera;
+    public Camera viewCamera;
 
     [HideInInspector]
     public PlayerIdleState idleState;
     [HideInInspector]
     public PlayerRunState runState;
     [HideInInspector]
-    public PlayerInAirState inAirState;
+    public PlayerFallingState fallingState;
     [HideInInspector]
     public PlayerJumpState jumpState;
+    [HideInInspector]
+    public PlayerDashState dashState;
 
     public Vector3 MovementInput { get; private set; }
     public Vector2 MouseInput { get; private set; }
     public bool JumpInput { get; private set; }
     private float m_jumpInputExpire;
+    public bool DashInput { get; private set; }
+    private float m_dashInputExpire;
 
     public bool IsGrounded { get; private set; }
 
@@ -71,6 +75,15 @@ public class PlayerController : MonoBehaviour
         m_pitch = Mathf.Clamp(m_pitch + amount, playerStats.minYaw, playerStats.maxYaw);
     }
 
+    public void SetFov(float amount)
+    {
+        viewCamera.fieldOfView = amount;
+    }
+    public float GetFov()
+    {
+        return viewCamera.fieldOfView;
+    }
+
     private void Start()
     {
         m_controller = GetComponent<CharacterController>();
@@ -80,8 +93,9 @@ public class PlayerController : MonoBehaviour
         // Create States
         idleState = new PlayerIdleState(this);
         runState = new PlayerRunState(this);
-        inAirState = new PlayerInAirState(this);
+        fallingState = new PlayerFallingState(this);
         jumpState = new PlayerJumpState(this);
+        dashState = new PlayerDashState(this);
 
         m_currentState = idleState;
         m_currentState.OnEnter();
@@ -97,7 +111,7 @@ public class PlayerController : MonoBehaviour
 
         // apply transforms
         transform.rotation = Quaternion.AngleAxis(m_yaw, Vector3.up);
-        viewCamera.localRotation = Quaternion.AngleAxis(-m_pitch, Vector3.right);
+        viewCamera.transform.localRotation = Quaternion.AngleAxis(-m_pitch, Vector3.right);
     }
 
     private void FixedUpdate()
@@ -117,11 +131,26 @@ public class PlayerController : MonoBehaviour
         if(!JumpInput && Input.GetKeyDown(KeyCode.Space))
         {
             JumpInput = true;
-            m_jumpInputExpire = Time.time + playerStats.jumpBufferTime;
+            m_jumpInputExpire = Time.time + playerStats.inputBufferTime;
         }
         else if(Time.time >= m_jumpInputExpire)
         {
             JumpInput = false;
         }
+
+        if (!DashInput && Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            DashInput = true;
+            m_dashInputExpire = Time.time + playerStats.inputBufferTime;
+        }
+        else if (Time.time >= m_dashInputExpire)
+        {
+            DashInput = false;
+        }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        m_currentState.OnControllerCollision(hit);
     }
 }

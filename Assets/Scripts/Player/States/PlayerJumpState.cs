@@ -10,6 +10,6 @@ public class PlayerJumpState : PlayerLookState
     {
         controller.UseJump();
         controller.Velocity = new Vector3(controller.Velocity.x, controller.playerStats.jumpPower, controller.Velocity.z);
-        controller.ChangeState(controller.inAirState);
+        controller.ChangeState(controller.fallingState);
     }
 }

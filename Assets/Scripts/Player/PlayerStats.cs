@@ -8,6 +8,7 @@ public class PlayerStats : ScriptableObject
     public LayerMask layer;
 
     public float gravity;
+    public float inputBufferTime;
 
     [Header("Speeds")]
     public float movementSpeed;
@@ -21,7 +22,6 @@ public class PlayerStats : ScriptableObject
 
     [Header("Jump")]
     public float jumpPower;
-    public float jumpBufferTime;
 
     [Header("Constraints")]
     public float maxYaw;
@@ -29,4 +29,10 @@ public class PlayerStats : ScriptableObject
 
     [Header("Friction")]
     public float groundFriction;
+
+    [Header("Dash")]
+    public AnimationCurve dashCurve;
+    public float dashFovDelta;
+    public float dashTime;
+    public float dashSpeed;
 }

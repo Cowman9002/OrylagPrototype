@@ -13,4 +13,5 @@ public abstract class PlayerState
     public virtual void OnExit() { }
     public virtual void OnUpdate() { }
     public virtual void OnFixedUpdate() { }
+    public virtual void OnControllerCollision(ControllerColliderHit hit) { }
 }
