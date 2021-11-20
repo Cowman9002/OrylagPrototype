@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerRunState : PlayerGroundState
 {
-    public PlayerRunState(PlayerController controller) : base(controller) { }
+    public PlayerRunState(PlayerMovementController controller) : base(controller) { }
 
     public override void OnUpdate()
     {

@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class PlayerState
 {
 
-    public PlayerState(PlayerController controller) => this.controller = controller;
+    public PlayerState(PlayerMovementController controller) => this.controller = controller;
 
-    protected PlayerController controller;
+    protected PlayerMovementController controller;
 
     public virtual void OnEnter() { }
     public virtual void OnExit() { }

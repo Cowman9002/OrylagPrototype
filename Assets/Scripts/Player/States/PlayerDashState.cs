@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerDashState : PlayerLookState
 {
-    public PlayerDashState(PlayerController controller) : base(controller) { }
+    public PlayerDashState(PlayerMovementController controller) : base(controller) { }
 
     private float m_endTime;
 
@@ -54,7 +54,7 @@ public class PlayerDashState : PlayerLookState
     {
         base.OnControllerCollision(hit);
 
-        if(Vector3.Dot(hit.normal, controller.Velocity.normalized) < 0.8f)
+        if(Vector3.Dot(hit.normal, controller.Velocity.normalized) < -0.7f)
         {
             controller.Velocity = Vector3.zero;
             ExitState();

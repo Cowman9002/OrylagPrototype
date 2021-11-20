@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerGroundState
 {
-    public PlayerIdleState(PlayerController controller) : base(controller) { }
+    public PlayerIdleState(PlayerMovementController controller) : base(controller) { }
 
     public override void OnUpdate()
     {

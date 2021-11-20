@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerLookState
 {
-    public PlayerJumpState(PlayerController controller) : base(controller) { }
+    public PlayerJumpState(PlayerMovementController controller) : base(controller) { }
 
     public override void OnEnter()
     {

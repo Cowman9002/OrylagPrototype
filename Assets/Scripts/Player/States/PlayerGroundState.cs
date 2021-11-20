@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerGroundState : PlayerLookState
 {
-    public PlayerGroundState(PlayerController controller) : base(controller) { }
+    public PlayerGroundState(PlayerMovementController controller) : base(controller) { }
 
     public override void OnEnter()
     {

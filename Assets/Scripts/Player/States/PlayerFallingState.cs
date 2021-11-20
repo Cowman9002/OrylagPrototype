@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerFallingState : PlayerInAirState
 {
-    public PlayerFallingState(PlayerController controller) : base(controller) { }
+    public PlayerFallingState(PlayerMovementController controller) : base(controller) { }
 
     public override void OnUpdate()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerLookState : PlayerState
 {
-    public PlayerLookState(PlayerController controller) : base(controller) { }
+    public PlayerLookState(PlayerMovementController controller) : base(controller) { }
 
     public override void OnUpdate()
     {
