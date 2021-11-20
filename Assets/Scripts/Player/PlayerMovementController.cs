@@ -26,6 +26,8 @@ public class PlayerMovementController : MonoBehaviour
     public bool DashInput { get; private set; }
     private float m_dashInputExpire;
 
+    private float m_canDashTime;
+
     public bool IsGrounded { get; private set; }
 
     private float m_yaw = 0.0f;
@@ -35,6 +37,7 @@ public class PlayerMovementController : MonoBehaviour
 
     // Components
     private CharacterController m_controller;
+    private AudioSource m_audio;
 
     private PlayerState m_currentState;
 
@@ -45,12 +48,33 @@ public class PlayerMovementController : MonoBehaviour
         m_currentState.OnEnter();
     }
 
+    public void PlaySound(AudioClip sound)
+    {
+        if(m_audio.isPlaying)
+        {
+            m_audio.Stop();
+        }
+
+        m_audio.clip = sound;
+        m_audio.Play();
+    }
+
     public void UseJump()
     {
         JumpInput = false;
         m_jumpInputExpire = 0;
         IsGrounded = false;
     }
+
+    public void UseDash()
+    {
+        DashInput = false;
+        m_dashInputExpire = 0;
+
+        m_canDashTime = Time.time + playerStats.dashCooldown;
+    }
+
+    public bool CanDash() => m_canDashTime <= Time.time;
 
     public void AccelerateToSpeed(Vector3 direction, float velocity, float acceleration)
     {
@@ -87,6 +111,7 @@ public class PlayerMovementController : MonoBehaviour
     private void Start()
     {
         m_controller = GetComponent<CharacterController>();
+        m_audio = GetComponent<AudioSource>();
 
         MovementInput = new Vector2();
 

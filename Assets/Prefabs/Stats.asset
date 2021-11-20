@@ -17,15 +17,17 @@ MonoBehaviour:
     m_Bits: 256
   gravity: -9.81
   inputBufferTime: 0.1
+  dashSound: {fileID: 8300000, guid: 3b4413e10dce92f4baac7e2c7155294c, type: 3}
   movementSpeed: 15
   airSpeed: 6
   rotateSpeed: 3
   airAccel: 3
   runAccel: 10
-  jumpPower: 7
+  jumpPower: 5
   maxYaw: 90
   minYaw: -80
   groundFriction: 0.3
+  dashCooldown: 1
   dashCurve:
     serializedVersion: 2
     m_Curve:

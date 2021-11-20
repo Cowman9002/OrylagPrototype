@@ -16,6 +16,9 @@ public class PlayerDashState : PlayerLookState
     public override void OnEnter()
     {
         base.OnEnter();
+        controller.UseDash();
+
+        controller.PlaySound(controller.playerStats.dashSound);
 
         Vector3 direction;
         direction = controller.transform.forward * controller.MovementInput.z;
