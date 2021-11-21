@@ -9,13 +9,11 @@ public class BTNode
         Running, Success, Failure
     }
 
+
+    public BTController controller;
     public BTNode parent;
-    protected List<BTNode> children;
 
-    public BTNode(List<BTNode> children)
-    {
-
-    }
+    public virtual void setController(BTController controller) { this.controller = controller; }
 
     public virtual BTResult Evaluate() { return BTResult.Failure; }
 }
