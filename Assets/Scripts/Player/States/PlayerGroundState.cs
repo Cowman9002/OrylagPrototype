@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerGroundState : PlayerLookState
 {
-    public PlayerGroundState(PlayerController controller) : base(controller) { }
+    public PlayerGroundState(PlayerMovementController controller) : base(controller) { }
 
     public override void OnEnter()
     {
@@ -15,10 +15,18 @@ public class PlayerGroundState : PlayerLookState
     {
         base.OnUpdate();
 
-        if(controller.JumpInput)
+        if(!controller.IsGrounded)
+        {
+            controller.ChangeState(controller.fallingState);
+        }
+        else if(controller.JumpInput)
         {
             controller.ChangeState(controller.jumpState);
             return;
+        }
+        else if (controller.DashInput && controller.CanDash())
+        {
+            controller.ChangeState(controller.dashState);
         }
     }
 

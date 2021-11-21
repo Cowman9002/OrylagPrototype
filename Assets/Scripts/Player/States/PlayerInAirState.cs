@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class PlayerInAirState : PlayerLookState
 {
-    public PlayerInAirState(PlayerController controller) : base(controller) { }
-
-    public override void OnEnter()
-    {
-    }
-
+    public PlayerInAirState(PlayerMovementController controller) : base(controller) { }
 
     public override void OnUpdate()
     {
@@ -33,12 +28,5 @@ public class PlayerInAirState : PlayerLookState
         base.OnFixedUpdate();
 
         controller.Velocity = controller.Velocity + Vector3.up * controller.playerStats.gravity * Time.fixedDeltaTime;
-
-        Vector3 direction;
-        direction = controller.transform.forward * controller.MovementInput.z;
-        direction += controller.transform.right * controller.MovementInput.x;
-        direction.Normalize();
-
-        controller.AccelerateToSpeed(direction, controller.playerStats.airSpeed, controller.playerStats.airAccel * Time.fixedDeltaTime);
     }
 }
