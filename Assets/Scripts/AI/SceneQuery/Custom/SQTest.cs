@@ -13,7 +13,7 @@ public class SQTest : SceneQuery
         nodes.Add(new SQInRangeNode(this, "Target", farRange, false));
         nodes.Add(new SQDistanceNode(this, "Target", false));
         nodes.Add(new SQDistanceNode(this, null, true));
-        nodes.Add(new SQDotProduct(this, "Target", false));
+        nodes.Add(new SQDotProduct(this, "Target", false, false, 0.1f));
         nodes.Add(new SQVisibleNode(this, "Target", 0.5f, false));
     }
 }

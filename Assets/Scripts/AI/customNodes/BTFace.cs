@@ -42,7 +42,7 @@ public class BTFace : BTNode
         Quaternion targRot = Quaternion.LookRotation(targDir);
         controller.transform.rotation = Quaternion.Slerp(controller.transform.rotation, targRot, Time.fixedDeltaTime * m_speed);
 
-        if(Quaternion.Angle(controller.transform.rotation, targRot) < 0.5)
+        if (Quaternion.Angle(controller.transform.rotation, targRot) < 0.5)
         {
             controller.transform.rotation = targRot;
             controller.FinishState();

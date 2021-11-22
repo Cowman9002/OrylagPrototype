@@ -11,7 +11,7 @@ public class BTController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        print(m_evalulatingNode);
+        //print(m_evalulatingNode);
         m_evalulatingNode.Evaluate();
     }
 

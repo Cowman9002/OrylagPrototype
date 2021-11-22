@@ -6,11 +6,15 @@ public class SQDotProduct : SQNode
 {
     private string m_target;
     private bool m_invert;
+    private bool m_abs;
+    private float m_min;
 
-    public SQDotProduct(SceneQuery parent, string target, bool invert) : base(parent)
+    public SQDotProduct(SceneQuery parent, string target, bool invert, bool abs, float min) : base(parent)
     {
         m_invert = invert;
         m_target = target;
+        m_abs = abs;
+        m_min = min;
     }
 
     public override bool PerformQuery(ref List<SceneQuery.QueryPoint> points)
@@ -18,19 +22,27 @@ public class SQDotProduct : SQNode
         Vector3 targDir;
         Vector3 targPos;
 
-        BlackBoardItem item;
-        switch (parent.blackBoard.getItem(m_target, out item))
+        if (m_target == null)
         {
-            case BlackBoardItem.EType.Transform:
-                targPos = ((BBTransform)item).value.position;
-                targDir = ((BBTransform)item).value.forward;
-                break;
-            case BlackBoardItem.EType.Agent:
-                targPos = ((BBAgent)item).value.transform.position;
-                targDir = ((BBAgent)item).value.transform.forward;
-                break;
-            default:
-                return false;
+            targPos = parent.transform.position;
+            targDir = parent.transform.forward;
+        }
+        else
+        {
+            BlackBoardItem item;
+            switch (parent.blackBoard.getItem(m_target, out item))
+            {
+                case BlackBoardItem.EType.Transform:
+                    targPos = ((BBTransform)item).value.position;
+                    targDir = ((BBTransform)item).value.forward;
+                    break;
+                case BlackBoardItem.EType.Agent:
+                    targPos = ((BBAgent)item).value.transform.position;
+                    targDir = ((BBAgent)item).value.transform.forward;
+                    break;
+                default:
+                    return false;
+            }
         }
 
         Queue<SceneQuery.QueryPoint> oldPoints = new Queue<SceneQuery.QueryPoint>();
@@ -42,11 +54,17 @@ public class SQDotProduct : SQNode
 
             float dot = Vector3.Dot(dir, targDir);
 
-            if (!m_invert && dot >= 0.0f || m_invert && dot <= 0.0f)
+            if (m_abs) dot = Mathf.Abs(dot);
+            if(m_invert) dot = 1.0f - dot;
+
+            dot = Mathf.Max(dot, m_min);
+
+            if(dot > 0)
             {
                 oldPoints.Enqueue(p);
-                newWeights.Enqueue(Mathf.Abs(dot));
+                newWeights.Enqueue(dot);
             }
+
         }
 
         points.Clear();
@@ -55,6 +73,7 @@ public class SQDotProduct : SQNode
         {
             SceneQuery.QueryPoint p = oldPoints.Dequeue();
             float weight = newWeights.Dequeue();
+
             p.weight *= weight;
 
             points.Add(p);

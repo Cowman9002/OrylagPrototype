@@ -6,9 +6,12 @@ using UnityEngine.AI;
 public class EnemyTestAI : BTController
 {
     public SceneQuery rangedQuery;
+    public SceneQuery idleQuery;
 
     public Transform playerTarget;
     public float memoryTime;
+
+    public float nearRange;
 
     public AgentSensor[] agentSensors;
 
@@ -27,26 +30,38 @@ public class EnemyTestAI : BTController
         root = new BTRoot(
                 new BTSelectorNode(new List<BTNode>
                 {
+                    // attack
                     new BTSequencerNode(new List<BTNode>
                     {
-                        new BTPrint("Attack"),
                         new BTCheckBB("Target"),
+                        new BTAgentStats(false),
                         new BTFace("Target", 30.0f),
                         new BTCheckBB("PlayerVisible"),
-                        new BTAgentStats(false),
+                        new BTInverter(new BTSequencerNode(new List<BTNode>
+                        {
+                            new BTInRange("Target", nearRange),
+                            new BTAgentStats(true),
+                        })),
                     }),
+                    // move to proper location
                     new BTSequencerNode(new List<BTNode>
                     {
-                        new BTPrint("Chase"),
                         new BTCheckBB("Target"),
                         new BTAgentStats(true),
                         new BTSQNode(rangedQuery, "AttackLocation"),
                         new BTGoToPosition("AttackLocation", false),
-                        new BTDelay(1.0f),
+                        new BTDelay(0.5f, "PlayerVisible", false),
                     }),
+                    // idle
                     new BTSequencerNode(new List<BTNode>
                     {
+                        new BTInverter(new BTCheckBB("Target")),
+                        new BTInverter(new BTCheckBB("PlayerVisible")),
+                        new BTSQNode(idleQuery, "IdleLocation"),
                         new BTPrint("Idle"),
+                        new BTAgentStats(true),
+                        new BTGoToPosition("IdleLocation", false),
+                        new BTDelay(3.0f, "PlayerVisible", true),
                     }),
                 })
             );

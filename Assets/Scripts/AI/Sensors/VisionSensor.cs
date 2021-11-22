@@ -58,7 +58,7 @@ public class VisionSensor : AgentSensor
 
         foreach (Collider c in colliderCopy)
         {
-            if (!currentColliderSet.Contains(c)) // collider no longer visible
+            if (!currentColliderSet.Contains(c) && c != null) // collider no longer visible
             {
                 colliderSet.Remove(c);
                 uint count;
@@ -89,7 +89,7 @@ public class VisionSensor : AgentSensor
         if (InCone(toTarget))
         {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, toTarget, out hit, viewRadius, layerMask))
+            if(Physics.SphereCast(new Ray(transform.position, toTarget), 0.2f, out hit, viewRadius, layerMask))
             {
                 if (hit.collider == other)
                 {

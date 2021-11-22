@@ -19,20 +19,27 @@ public class SQVisibleNode : SQNode
     {
         Vector3 targPos;
 
-        BlackBoardItem item;
-        switch (parent.blackBoard.getItem(m_target, out item))
+        if (m_target == null)
         {
-            case BlackBoardItem.EType.Transform:
-                targPos = ((BBTransform)item).value.position;
-                break;
-            case BlackBoardItem.EType.Agent:
-                targPos = ((BBAgent)item).value.transform.position;
-                break;
-            case BlackBoardItem.EType.Vector:
-                targPos = ((BBVector)item).value;
-                break;
-            default:
-                return false;
+            targPos = parent.transform.position;
+        }
+        else
+        {
+            BlackBoardItem item;
+            switch (parent.blackBoard.getItem(m_target, out item))
+            {
+                case BlackBoardItem.EType.Transform:
+                    targPos = ((BBTransform)item).value.position;
+                    break;
+                case BlackBoardItem.EType.Agent:
+                    targPos = ((BBAgent)item).value.transform.position;
+                    break;
+                case BlackBoardItem.EType.Vector:
+                    targPos = ((BBVector)item).value;
+                    break;
+                default:
+                    return false;
+            }
         }
 
         Queue<SceneQuery.QueryPoint> oldPoints = new Queue<SceneQuery.QueryPoint>();
