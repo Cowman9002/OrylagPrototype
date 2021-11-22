@@ -4,31 +4,9 @@ using UnityEngine;
 
 public class BTController : MonoBehaviour
 {
+    public AIBlackBoard blackBoard;
+
     protected BTRoot root;
-
-    protected Dictionary<string, Object> blackboard = new Dictionary<string, Object>();
-
-    public bool getItemFromBB<T>(string name, out T item) where T : Object
-    {
-        Object obj;
-        bool res = blackboard.TryGetValue(name, out obj);
-
-        if(res)
-        {
-            item = (T)obj;
-        }
-        else
-        {
-            item = null;
-        }
-
-        return res;
-    }
-
-    public void removeItemFromBB(string name)
-    {
-        blackboard.Remove(name);
-    }
 
     public void FixedUpdate()
     {
