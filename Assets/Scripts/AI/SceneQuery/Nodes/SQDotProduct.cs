@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class SQDotProduct : SQNode
 {
-    private AIBlackBoard.BlackBoardElement m_target;
+    private string m_target;
     private bool m_invert;
 
-    public SQDotProduct(SceneQuery parent, AIBlackBoard.BlackBoardElement target, bool invert) : base(parent)
+    public SQDotProduct(SceneQuery parent, string target, bool invert) : base(parent)
     {
         m_invert = invert;
         m_target = target;
@@ -18,16 +18,19 @@ public class SQDotProduct : SQNode
         Vector3 targDir;
         Vector3 targPos;
 
-        switch (m_target.type)
+        BlackBoardItem item;
+        switch (parent.blackBoard.getItem(m_target, out item))
         {
-            case AIBlackBoard.BlackBoardElement.ElementType.Transform:
-                Transform transform;
-                if (!parent.blackBoard.getItem(m_target.key, out transform)) return false;
-                targDir = transform.forward;
-                targPos = transform.position;
-
+            case BlackBoardItem.EType.Transform:
+                targPos = ((BBTransform)item).value.position;
+                targDir = ((BBTransform)item).value.forward;
                 break;
-            default: return false;
+            case BlackBoardItem.EType.Agent:
+                targPos = ((BBAgent)item).value.transform.position;
+                targDir = ((BBAgent)item).value.transform.forward;
+                break;
+            default:
+                return false;
         }
 
         Queue<SceneQuery.QueryPoint> oldPoints = new Queue<SceneQuery.QueryPoint>();

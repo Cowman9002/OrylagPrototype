@@ -5,9 +5,9 @@ using UnityEngine;
 public class BTSetBB : BTNode
 {
     private string m_name;
-    Object m_value;
+    BlackBoardItem m_value;
 
-    public BTSetBB(string name, Object value)
+    public BTSetBB(string name, BlackBoardItem value)
     {
         m_name = name;
         m_value = value;
@@ -15,7 +15,7 @@ public class BTSetBB : BTNode
 
     public override BTResult Evaluate()
     {
-        controller.blackBoard.addItem(m_name, m_value);
+        controller.blackBoard.setItem(m_name, m_value);
 
         return BTResult.Success;
     }

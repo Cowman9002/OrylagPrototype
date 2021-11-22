@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerMovementController : MonoBehaviour
 {
     public PlayerStats playerStats;
+    public Transform viewTransform;
     public Camera viewCamera;
 
     [HideInInspector]
@@ -136,7 +137,7 @@ public class PlayerMovementController : MonoBehaviour
 
         // apply transforms
         transform.rotation = Quaternion.AngleAxis(m_yaw, Vector3.up);
-        viewCamera.transform.localRotation = Quaternion.AngleAxis(-m_pitch, Vector3.right);
+        viewTransform.localRotation = Quaternion.AngleAxis(-m_pitch, Vector3.right);
     }
 
     private void FixedUpdate()

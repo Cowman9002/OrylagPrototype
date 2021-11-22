@@ -5,9 +5,10 @@ using UnityEngine.AI;
 
 public class BTGoToPosition : BTNode
 {
-    private AIBlackBoard.BlackBoardElement m_target;
+    private string m_target;
     private bool m_movingTarget;
-    public BTGoToPosition(AIBlackBoard.BlackBoardElement target, bool movingTarget)
+
+    public BTGoToPosition(string target, bool movingTarget)
     {
         m_target = target;
         m_movingTarget = movingTarget;
@@ -18,20 +19,32 @@ public class BTGoToPosition : BTNode
         Vector3 targPos;
         NavMeshAgent agent;
 
-        switch(m_target.type)
+        BlackBoardItem item;
+        switch(controller.blackBoard.getItem(m_target, out item))
         {
-            case AIBlackBoard.BlackBoardElement.ElementType.Transform:
-
-                Transform target;
-                if (!controller.blackBoard.getItem(m_target.key, out target)) return BTResult.Failure;
-                targPos = target.position;
-
+            case BlackBoardItem.EType.Transform:
+                targPos = ((BBTransform)item).value.position;
                 break;
-            default: return BTResult.Failure;
+            case BlackBoardItem.EType.Agent:
+                targPos = ((BBAgent)item).value.transform.position;
+                break;
+            case BlackBoardItem.EType.Vector:
+                targPos = ((BBVector)item).value;
+                break;
+            default:
+                controller.FinishState();
+                return BTResult.Failure;
         }
 
-        
-        if (!controller.blackBoard.getItem("SelfAgent", out agent)) return BTResult.Failure;
+        switch (controller.blackBoard.getItem("SelfAgent", out item))
+        {
+            case BlackBoardItem.EType.Agent:
+                agent = ((BBAgent)item).value;
+                break;
+            default:
+                controller.FinishState();
+                return BTResult.Failure;
+        }
 
         if (m_movingTarget)
         {
@@ -47,9 +60,11 @@ public class BTGoToPosition : BTNode
 
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
+            controller.FinishState();
             return BTResult.Success;
         }
 
+        controller.SetEvaluatingNode(this);
         return BTResult.Running;
     }
 }

@@ -5,10 +5,10 @@ using UnityEngine.AI;
 
 public class BTFace : BTNode
 {
-    private AIBlackBoard.BlackBoardElement m_target;
+    private string m_target;
     private float m_speed;
 
-    public BTFace(AIBlackBoard.BlackBoardElement target, float speed)
+    public BTFace(string target, float speed)
     {
         m_target = target;
         m_speed = speed;
@@ -18,15 +18,21 @@ public class BTFace : BTNode
     {
         Vector3 targPos;
 
-        switch (m_target.type)
+        BlackBoardItem item;
+        switch (controller.blackBoard.getItem(m_target, out item))
         {
-            case AIBlackBoard.BlackBoardElement.ElementType.Transform:
-                Transform transform;
-                if (!controller.blackBoard.getItem(m_target.key, out transform))
-                    return BTResult.Failure;
-                targPos = transform.position;
+            case BlackBoardItem.EType.Transform:
+                targPos = ((BBTransform)item).value.position;
                 break;
-            default: return BTResult.Failure;
+            case BlackBoardItem.EType.Agent:
+                targPos = ((BBAgent)item).value.transform.position;
+                break;
+            case BlackBoardItem.EType.Vector:
+                targPos = ((BBVector)item).value;
+                break;
+            default:
+                controller.FinishState();
+                return BTResult.Failure;
         }
 
         Vector3 targDir = (targPos - controller.transform.position);
@@ -39,9 +45,11 @@ public class BTFace : BTNode
         if(Quaternion.Angle(controller.transform.rotation, targRot) < 0.5)
         {
             controller.transform.rotation = targRot;
+            controller.FinishState();
             return BTResult.Success;
         }
 
+        controller.SetEvaluatingNode(this);
         return BTResult.Running;
     }
 }

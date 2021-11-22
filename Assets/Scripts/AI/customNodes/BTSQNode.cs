@@ -15,16 +15,13 @@ public class BTSQNode : BTNode
 
     public override BTResult Evaluate()
     {
-        Transform t;
-        if (!controller.blackBoard.getItem(m_storage, out t)) return BTResult.Failure;
-
         Vector3 position;
         if(!m_query.Evaluate(out position))
         {
             return BTResult.Failure;
         }
 
-        t.position = position;
+        controller.blackBoard.setItem(m_storage, new BBVector(position));
 
         return BTResult.Success;
     }

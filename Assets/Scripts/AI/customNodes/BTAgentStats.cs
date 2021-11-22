@@ -14,7 +14,16 @@ public class BTAgentStats : BTNode
     public override BTResult Evaluate()
     {
         NavMeshAgent agent;
-        if (!controller.blackBoard.getItem("SelfAgent", out agent)) return BTResult.Failure;
+
+        BlackBoardItem item;
+        switch (controller.blackBoard.getItem("SelfAgent", out item))
+        {
+            case BlackBoardItem.EType.Agent:
+                agent = ((BBAgent)item).value;
+                break;
+            default:
+                return BTResult.Failure;
+        }
 
         agent.updateRotation = m_allowRotation;
 

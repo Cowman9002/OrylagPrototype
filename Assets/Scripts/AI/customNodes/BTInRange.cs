@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BTInRange : BTNode
 {
-    private AIBlackBoard.BlackBoardElement m_target;
+    private string m_target;
     private float m_sqrRange;
-    public BTInRange(AIBlackBoard.BlackBoardElement target, float range)
+    public BTInRange(string target, float range)
     {
         m_target = target;
         m_sqrRange = range * range;
@@ -16,19 +16,23 @@ public class BTInRange : BTNode
     {
         Vector3 targPos;
 
-        switch (m_target.type)
+        BlackBoardItem item;
+        switch (controller.blackBoard.getItem(m_target, out item))
         {
-            case AIBlackBoard.BlackBoardElement.ElementType.Transform:
-                Transform transform;
-                if (!controller.blackBoard.getItem(m_target.key, out transform)) return BTResult.Failure;
-                targPos = transform.position;
-
+            case BlackBoardItem.EType.Transform:
+                targPos = ((BBTransform)item).value.position;
                 break;
-            default: return BTResult.Failure;
+            case BlackBoardItem.EType.Agent:
+                targPos = ((BBAgent)item).value.transform.position;
+                break;
+            case BlackBoardItem.EType.Vector:
+                targPos = ((BBVector)item).value;
+                break;
+            default:
+                return BTResult.Failure;
         }
 
         float dist = Vector3.SqrMagnitude(targPos - controller.transform.position);
-        //Debug.Log(Mathf.Sqrt(dist));
 
         if (dist < m_sqrRange)
         {

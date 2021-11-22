@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SQInRangeNode : SQNode
 {
-    private AIBlackBoard.BlackBoardElement m_target;
+    private string m_target;
     private bool m_invert;
     private float m_sqrDist;
 
-    public SQInRangeNode(SceneQuery parent, AIBlackBoard.BlackBoardElement target, float distance, bool invert) : base(parent)
+    public SQInRangeNode(SceneQuery parent, string target, float distance, bool invert) : base(parent)
     {
         m_invert = invert;
         m_target = target;
@@ -19,15 +19,20 @@ public class SQInRangeNode : SQNode
     {
         Vector3 targPos;
 
-        switch (m_target.type)
+        BlackBoardItem item;
+        switch (parent.blackBoard.getItem(m_target, out item))
         {
-            case AIBlackBoard.BlackBoardElement.ElementType.Transform:
-                Transform transform;
-                if (!parent.blackBoard.getItem(m_target.key, out transform)) return false;
-                targPos = transform.position;
-
+            case BlackBoardItem.EType.Transform:
+                targPos = ((BBTransform)item).value.position;
                 break;
-            default: return false;
+            case BlackBoardItem.EType.Agent:
+                targPos = ((BBAgent)item).value.transform.position;
+                break;
+            case BlackBoardItem.EType.Vector:
+                targPos = ((BBVector)item).value;
+                break;
+            default:
+                return false;
         }
 
         Queue<SceneQuery.QueryPoint> oldPoints = new Queue<SceneQuery.QueryPoint>();

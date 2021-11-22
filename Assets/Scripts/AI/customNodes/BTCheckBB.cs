@@ -4,24 +4,36 @@ using UnityEngine;
 
 public class BTCheckBB : BTNode
 {
-    private AIBlackBoard.BlackBoardElement m_item;
-    public BTCheckBB(AIBlackBoard.BlackBoardElement item)
+    private string m_item;
+
+    public BTCheckBB(string item)
     {
         m_item = item;
     }
 
     public override BTResult Evaluate()
     {
-        switch(m_item.type)
+        bool v;
+
+        BlackBoardItem item;
+        switch (controller.blackBoard.getItem(m_item, out item))
         {
-            case AIBlackBoard.BlackBoardElement.ElementType.Transform:
-                Transform t;
-                if (!controller.blackBoard.getItem(m_item.key, out t)) return BTResult.Failure;
-                if (t != null) return BTResult.Success;
+            case BlackBoardItem.EType.Bool:
+                v = ((BBBool)item).value;
                 break;
+            case BlackBoardItem.EType.Transform:
+                v = ((BBTransform)item).value != null;
+                break;
+            case BlackBoardItem.EType.Agent:
+                v = ((BBAgent)item).value != null;
+                break;
+            case BlackBoardItem.EType.Vector:
+                v = ((BBVector)item).value != null;
+                break;
+            default:
+                return BTResult.Failure;
         }
 
-
-        return BTResult.Failure;
+        return v ? BTResult.Success : BTResult.Failure;
     }
 }

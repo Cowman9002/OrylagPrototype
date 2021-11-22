@@ -9,11 +9,11 @@ public class SQTest : SceneQuery
 
     void Start()
     {
-        nodes.Add(new SQInRangeNode(this, new AIBlackBoard.BlackBoardElement("Target", AIBlackBoard.BlackBoardElement.ElementType.Transform), nearRange, true));
-        nodes.Add(new SQInRangeNode(this, new AIBlackBoard.BlackBoardElement("Target", AIBlackBoard.BlackBoardElement.ElementType.Transform), farRange, false));
-        nodes.Add(new SQDistanceNode(this, new AIBlackBoard.BlackBoardElement("Target", AIBlackBoard.BlackBoardElement.ElementType.Transform), false));
-        nodes.Add(new SQDistanceNode(this, new AIBlackBoard.BlackBoardElement(null, AIBlackBoard.BlackBoardElement.ElementType.Transform), true));
-        nodes.Add(new SQDotProduct(this, new AIBlackBoard.BlackBoardElement("Target", AIBlackBoard.BlackBoardElement.ElementType.Transform), false));
-        nodes.Add(new SQVisibleNode(this, new AIBlackBoard.BlackBoardElement("Target", AIBlackBoard.BlackBoardElement.ElementType.Transform), 0.5f, false));
+        nodes.Add(new SQInRangeNode(this, "Target", nearRange, true));
+        nodes.Add(new SQInRangeNode(this, "Target", farRange, false));
+        nodes.Add(new SQDistanceNode(this, "Target", false));
+        nodes.Add(new SQDistanceNode(this, null, true));
+        nodes.Add(new SQDotProduct(this, "Target", false));
+        nodes.Add(new SQVisibleNode(this, "Target", 0.5f, false));
     }
 }
