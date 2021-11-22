@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BTGoToPosition : BTNode
+public class BTFace : BTNode
 {
     private string m_target;
-    private bool m_movingTarget;
+    private float m_speed;
 
-    public BTGoToPosition(string target, bool movingTarget)
+    public BTFace(string target, float speed)
     {
         m_target = target;
-        m_movingTarget = movingTarget;
+        m_speed = speed;
     }
 
     public override BTResult Evaluate()
     {
         Vector3 targPos;
-        NavMeshAgent agent;
 
         BlackBoardItem item;
-        switch(controller.blackBoard.getItem(m_target, out item))
+        switch (controller.blackBoard.getItem(m_target, out item))
         {
             case BlackBoardItem.EType.Transform:
                 targPos = ((BBTransform)item).value.position;
@@ -36,30 +35,16 @@ public class BTGoToPosition : BTNode
                 return BTResult.Failure;
         }
 
-        switch (controller.blackBoard.getItem("SelfAgent", out item))
-        {
-            case BlackBoardItem.EType.Agent:
-                agent = ((BBAgent)item).value;
-                break;
-            default:
-                controller.FinishState();
-                return BTResult.Failure;
-        }
+        Vector3 targDir = (targPos - controller.transform.position);
+        targDir.y = 0.0f;
+        targDir.Normalize();
 
-        if (m_movingTarget)
-        {
-            agent.destination = targPos;
-        }
-        else
-        {
-            if (!agent.hasPath)
-            {
-                agent.destination = targPos;
-            }
-        }
+        Quaternion targRot = Quaternion.LookRotation(targDir);
+        controller.transform.rotation = Quaternion.Slerp(controller.transform.rotation, targRot, Time.fixedDeltaTime * m_speed);
 
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        if (Quaternion.Angle(controller.transform.rotation, targRot) < 0.5)
         {
+            controller.transform.rotation = targRot;
             controller.FinishState();
             return BTResult.Success;
         }

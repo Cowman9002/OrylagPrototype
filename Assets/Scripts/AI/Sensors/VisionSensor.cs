@@ -2,152 +2,130 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CapsuleCollider))]
 public class VisionSensor : AgentSensor
 {
     public LayerMask layerMask;
 
-    [Range(0.001f, 90.0f)]
-    public float viewAngle;
+    [Range(0.001f, 180.0f)]
+    public float halfViewAngle = 20.0f;
     [Min(0.001f)]
-    public float viewDistance;
+    public float viewRadius = 10.0f;
 
-    private HashSet<Collider> colliders = new HashSet<Collider>();
-    private Dictionary<Transform, uint> oldObjects = new Dictionary<Transform, uint>();
-
-    private CapsuleCollider m_collider;
-
-    private void Start()
-    {
-        m_collider = GetComponent<CapsuleCollider>();
-        m_collider.isTrigger = true;
-        UpdateViewAngle();
-    }
+    private HashSet<Collider> colliderSet = new HashSet<Collider>();
+    private HashSet<Collider> currentColliderSet = new HashSet<Collider>();
+    private Dictionary<Transform, uint> visibleObjects = new Dictionary<Transform, uint>();
 
     public override bool hasTransform(Transform t)
     {
-        return oldObjects.ContainsKey(t);
+        return visibleObjects.ContainsKey(t);
     }
 
-    public void UpdateViewAngle()
+    private void FixedUpdate()
     {
-        m_collider.height = viewDistance * Mathf.PI;
-        m_collider.center = new Vector3(0.0f, 0.0f, m_collider.height * 0.5f);
-        m_collider.radius = Mathf.Sin(Mathf.Deg2Rad * viewAngle) * viewDistance;
-    }
+        Collider[] colliders = Physics.OverlapSphere(transform.position, viewRadius, layerMask);
 
-    private void OnTriggerEnter(Collider other)
-    {
-        IsVisible(other);
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        bool visible = IsVisible(other);
-
-        if (colliders.Contains(other))
+        foreach(Collider col in colliders)
         {
-            uint count;
-            if (!visible && oldObjects.TryGetValue(other.transform, out count))
-            {
-                colliders.Remove(other);
-                if (count == 0)
-                {
-                    oldObjects.Remove(other.transform);
-                    controller.SensorObjectExit(other.transform);
-                }
-                else
-                {
-                    oldObjects[other.transform] = count - 1;
-                }
-            }
-        }
-    }
+            if (col.GetType() == typeof(MeshCollider) && !((MeshCollider)col).convex) continue;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (colliders.Contains(other))
-        {
-            uint count;
-            if (oldObjects.TryGetValue(other.transform, out count))
-            {
-                colliders.Remove(other);
-                if (count == 0)
-                {
-                    oldObjects.Remove(other.transform);
-                    controller.SensorObjectExit(other.transform);
-                }
-                else
-                {
-                    oldObjects[other.transform] = count - 1;
-                }
-            }
-        }
-    }
+            bool visible = DoVisionTest(col);
 
-    private bool IsVisible(Collider other)
-    {
-        bool visible = false;
-        Vector3 toTarget = other.ClosestPoint(transform.position) - transform.position;
-
-        if (toTarget.magnitude <= viewDistance)
-        {
-            toTarget.Normalize();
-            if (InCone(toTarget))
+            if (visible)
             {
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, toTarget, out hit, viewDistance, layerMask))
+                currentColliderSet.Add(col);
+
+                if (!colliderSet.Contains(col)) // new collider
                 {
-                    if (hit.collider == other)
+                    colliderSet.Add(col);
+
+                    uint count;
+                    if (visibleObjects.TryGetValue(col.transform, out count))
                     {
-                        visible = true;
+                        visibleObjects[col.transform] = count + 1;
 
-                        if(!colliders.Contains(other))
-                        {
-                            colliders.Add(other);
-
-                            uint count;
-                            if (oldObjects.TryGetValue(other.transform, out count))
-                            {
-                                oldObjects[other.transform] = count + 1;
-
-                            }
-                            else
-                            {
-                                oldObjects.Add(other.transform, 0);
-                                controller.SensorObjectEnter(other.transform);
-                            }
-                        }
+                    }
+                    else
+                    {
+                        visibleObjects.Add(col.transform, 0);
+                        controller.SensorObjectEnter(col.transform);
                     }
                 }
             }
         }
-        Debug.DrawRay(transform.position, toTarget * viewDistance, visible ? Color.green : Color.red);
+
+        Collider[] colliderCopy = new Collider[colliderSet.Count];
+        colliderSet.CopyTo(colliderCopy);
+
+        foreach (Collider c in colliderCopy)
+        {
+            if (!currentColliderSet.Contains(c) && c != null) // collider no longer visible
+            {
+                colliderSet.Remove(c);
+                uint count;
+                if (visibleObjects.TryGetValue(c.transform, out count))
+                {
+                    if (count == 0)
+                    {
+                        visibleObjects.Remove(c.transform);
+                        controller.SensorObjectExit(c.transform);
+                    }
+                    else
+                    {
+                        visibleObjects[c.transform] = count - 1;
+                    }
+                }
+            }
+        }
+
+        currentColliderSet.Clear();
+    }
+
+    private bool DoVisionTest(Collider other)
+    {
+        bool visible = false;
+        Vector3 toTarget = other.ClosestPoint(transform.position) - transform.position;
+
+        toTarget.Normalize();
+        if (InCone(toTarget))
+        {
+            RaycastHit hit;
+            if(Physics.SphereCast(new Ray(transform.position, toTarget), 0.2f, out hit, viewRadius, layerMask))
+            {
+                if (hit.collider == other)
+                {
+                    visible = true;
+                }
+            }
+        }
+
+        //Debug.DrawRay(transform.position, toTarget * viewRadius, visible ? Color.green : Color.red);
 
         return visible;
     }
 
     private bool InCone(Vector3 toVector)
     {
-        bool res = Mathf.Abs(Vector3.Angle(toVector, transform.forward)) <= viewAngle;
-
-        Color c = res ? Color.green : Color.red;
-        Debug.DrawRay(transform.position, toVector, c);
-
+        bool res = Mathf.Abs(Vector3.Angle(toVector, transform.forward)) <= halfViewAngle;
         return res;
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.cyan;
+        Gizmos.color = Color.green;
 
-        Gizmos.DrawRay(transform.position, Quaternion.AngleAxis(viewAngle, transform.right) * transform.forward * viewDistance);
-        Gizmos.DrawRay(transform.position, Quaternion.AngleAxis(viewAngle, -transform.right) * transform.forward * viewDistance);
+        Vector3 startDir = Quaternion.AngleAxis(halfViewAngle, Vector3.up) * transform.forward;
+        Vector3 endDir = Quaternion.AngleAxis(halfViewAngle, -Vector3.up) * transform.forward;
 
-        Gizmos.DrawRay(transform.position, Quaternion.AngleAxis(viewAngle, transform.up) * transform.forward * viewDistance);
-        Gizmos.DrawRay(transform.position, Quaternion.AngleAxis(viewAngle, -transform.up) * transform.forward * viewDistance);
+        Gizmos.DrawRay(transform.position, startDir * viewRadius);
+        Gizmos.DrawRay(transform.position, endDir * viewRadius);
 
         Gizmos.color = Color.grey;
-        Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
+        Gizmos.DrawRay(transform.position, transform.forward * viewRadius);
+
+        UnityEditor.Handles.color = Color.yellow;
+        UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, viewRadius);
+
+        UnityEditor.Handles.color = Color.green;
+        UnityEditor.Handles.DrawWireArc(transform.position, Vector3.up, endDir, halfViewAngle * 2, viewRadius * 0.2f);
     }
 }

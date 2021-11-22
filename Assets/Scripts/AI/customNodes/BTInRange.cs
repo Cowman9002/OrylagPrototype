@@ -4,21 +4,35 @@ using UnityEngine;
 
 public class BTInRange : BTNode
 {
-    private string m_targetName;
+    private string m_target;
     private float m_sqrRange;
-    public BTInRange(string targetName, float range)
+    public BTInRange(string target, float range)
     {
-        m_targetName = targetName;
+        m_target = target;
         m_sqrRange = range * range;
     }
 
     public override BTResult Evaluate()
     {
-        Transform target;
-        if (!controller.getItemFromBB(m_targetName, out target)) return BTResult.Failure;
+        Vector3 targPos;
 
-        float dist = Vector3.SqrMagnitude(target.position - controller.transform.position);
-        Debug.Log(dist);
+        BlackBoardItem item;
+        switch (controller.blackBoard.getItem(m_target, out item))
+        {
+            case BlackBoardItem.EType.Transform:
+                targPos = ((BBTransform)item).value.position;
+                break;
+            case BlackBoardItem.EType.Agent:
+                targPos = ((BBAgent)item).value.transform.position;
+                break;
+            case BlackBoardItem.EType.Vector:
+                targPos = ((BBVector)item).value;
+                break;
+            default:
+                return BTResult.Failure;
+        }
+
+        float dist = Vector3.SqrMagnitude(targPos - controller.transform.position);
 
         if (dist < m_sqrRange)
         {

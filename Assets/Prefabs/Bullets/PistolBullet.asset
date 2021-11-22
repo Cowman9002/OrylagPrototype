@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gfx: {fileID: 1265481083953467983, guid: 5fdc0773832000f47b2d70f16a55ee5e, type: 3}
   lifeTime: 5
-  speed: 20
+  speed: 50

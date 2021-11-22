@@ -4,37 +4,20 @@ using UnityEngine;
 
 public class BTController : MonoBehaviour
 {
+    public AIBlackBoard blackBoard;
+
     protected BTRoot root;
-
-    protected Dictionary<string, Object> blackboard = new Dictionary<string, Object>();
-
-    public bool getItemFromBB<T>(string name, out T item) where T : Object
-    {
-        Object obj;
-        bool res = blackboard.TryGetValue(name, out obj);
-
-        if(res)
-        {
-            item = (T)obj;
-        }
-        else
-        {
-            item = null;
-        }
-
-        return res;
-    }
-
-    public void removeItemFromBB(string name)
-    {
-        blackboard.Remove(name);
-    }
+    private BTNode m_evalulatingNode;
 
     public void FixedUpdate()
     {
-        root.Evaluate();
+        //print(m_evalulatingNode);
+        m_evalulatingNode.Evaluate();
     }
 
     public virtual void SensorObjectEnter(Transform newObject) { }
     public virtual void SensorObjectExit(Transform newObject) { }
+
+    public void SetEvaluatingNode(BTNode node) => m_evalulatingNode = node;
+    public void FinishState() => m_evalulatingNode = root;
 }
