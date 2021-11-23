@@ -6,13 +6,13 @@ public class BTInRange : BTNode
 {
     private string m_target;
     private float m_sqrRange;
-    public BTInRange(string target, float range)
+    public BTInRange(string name, string target, float range) : base(name)
     {
         m_target = target;
         m_sqrRange = range * range;
     }
 
-    public override BTResult Evaluate()
+    public override BTController.BTStateEndData Evaluate()
     {
         Vector3 targPos;
 
@@ -29,18 +29,18 @@ public class BTInRange : BTNode
                 targPos = ((BBVector)item).value;
                 break;
             default:
-                return BTResult.Failure;
+                return controller.EndState(BTResult.Failure);
         }
 
         float dist = Vector3.SqrMagnitude(targPos - controller.transform.position);
 
         if (dist < m_sqrRange)
         {
-            return BTResult.Success;
+            return controller.EndState(BTResult.Success);
         }
         else
         {
-            return BTResult.Failure;
+            return controller.EndState(BTResult.Failure);
         }
 
     }

@@ -8,16 +8,15 @@ public class BTGoToPosition : BTNode
     private string m_target;
     private bool m_movingTarget;
 
-    public BTGoToPosition(string target, bool movingTarget)
+    public BTGoToPosition(string name, string target, bool movingTarget) : base(name)
     {
         m_target = target;
         m_movingTarget = movingTarget;
     }
 
-    public override BTResult Evaluate()
+    public override BTController.BTStateEndData Evaluate()
     {
         Vector3 targPos;
-        NavMeshAgent agent;
 
         BlackBoardItem item;
         switch(controller.blackBoard.getItem(m_target, out item))
@@ -32,39 +31,28 @@ public class BTGoToPosition : BTNode
                 targPos = ((BBVector)item).value;
                 break;
             default:
-                controller.FinishState();
-                return BTResult.Failure;
-        }
-
-        switch (controller.blackBoard.getItem("SelfAgent", out item))
-        {
-            case BlackBoardItem.EType.Agent:
-                agent = ((BBAgent)item).value;
-                break;
-            default:
-                controller.FinishState();
-                return BTResult.Failure;
+                return controller.EndState(BTResult.Failure);
         }
 
         if (m_movingTarget)
         {
-            agent.destination = targPos;
+            controller.agentSelf.destination = targPos;
         }
         else
         {
-            if (!agent.hasPath)
+            if (!controller.agentSelf.hasPath)
             {
-                agent.destination = targPos;
+                controller.agentSelf.destination = targPos;
             }
         }
 
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        if (controller.agentSelf.remainingDistance <= controller.agentSelf.stoppingDistance && 
+                controller.agentSelf.pathStatus == NavMeshPathStatus.PathComplete)
         {
-            controller.FinishState();
-            return BTResult.Success;
+            return controller.EndState(BTResult.Success);
+            //return controller.EndState(BTResult.Failure);
         }
 
-        controller.SetEvaluatingNode(this);
-        return BTResult.Running;
+        return controller.EndState(BTResult.Running);
     }
 }
