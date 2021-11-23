@@ -7,10 +7,12 @@ public class SQVisibleNode : SQNode
     private bool m_invert;
     private float m_radius;
     private string m_target;
+    private LayerMask m_rayMask;
 
-    public SQVisibleNode(SceneQuery parent, string target, float radius, bool invert) : base(parent)
+    public SQVisibleNode(SceneQuery parent, string target, LayerMask rayMask, float radius, bool invert) : base(parent)
     {
         m_invert = invert;
+        m_rayMask = rayMask;
         m_target = target;
         m_radius = radius;
     }
@@ -50,7 +52,7 @@ public class SQVisibleNode : SQNode
             RaycastHit hit;
             bool visible = false;
 
-            if(Physics.Raycast(new Ray(p.position, dir), out hit))
+            if(Physics.Raycast(new Ray(p.position, dir), out hit, Mathf.Infinity, m_rayMask))
             {
                 if((targPos - hit.point).sqrMagnitude <= m_radius * m_radius)
                 {

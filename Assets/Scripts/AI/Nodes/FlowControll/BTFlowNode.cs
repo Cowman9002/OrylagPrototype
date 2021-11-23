@@ -6,7 +6,7 @@ public class BTFlowNode : BTNode
 {
     protected List<BTNode> children;
 
-    public BTFlowNode(List<BTNode> children)
+    public BTFlowNode(string name, List<BTNode> children) : base(name)
     {
         this.children = children;
         foreach(BTNode node in this.children)
@@ -20,6 +20,8 @@ public class BTFlowNode : BTNode
         base.setController(controller);
         foreach (BTNode node in children)
         {
+            node.parent = this;
+            node.ValidateName();
             node.setController(controller);
         }
     }

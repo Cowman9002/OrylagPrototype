@@ -7,11 +7,12 @@ public class BTDelay : BTNode
 {
     private float m_endTime;
     private float m_delay;
+    private bool m_isActive = false;
 
     private string m_abortName;
     bool m_abortState;
 
-    public BTDelay(float time, string abortName, bool abortState)
+    public BTDelay(string name, float time, string abortName, bool abortState) : base(name)
     {
         m_delay = time;
         m_endTime = -1;
@@ -20,12 +21,12 @@ public class BTDelay : BTNode
         m_abortState = abortState;
     }
 
-    public override BTResult Evaluate()
+    public override BTController.BTStateEndData Evaluate()
     {
-        if(m_endTime < 0)
+        if (!m_isActive)
         {
+            m_isActive = true;
             m_endTime = Time.time + m_delay;
-            controller.SetEvaluatingNode(this);
         }
         else
         {
@@ -48,25 +49,25 @@ public class BTDelay : BTNode
                         v = ((BBVector)item).value != null;
                         break;
                     default:
-                        return BTResult.Failure;
+                        return controller.EndState(BTResult.Failure);
                 }
 
                 if(v == m_abortState)
                 {
-                    m_endTime = -1;
-                    controller.FinishState();
-                    return BTResult.Failure;
+                    m_isActive = false;
+                    return controller.EndState(BTResult.Failure);
                 }
             }
 
+            //Debug.Log("Waiting: " + (m_endTime - Time.time));
+
             if(Time.time >= m_endTime)
             {
-                m_endTime = -1;
-                controller.FinishState();
-                return BTResult.Success;
+                m_isActive = false;
+                return controller.EndState(BTResult.Success);
             }
         }
 
-        return BTResult.Running;
+        return controller.EndState(BTResult.Running);
     }
 }

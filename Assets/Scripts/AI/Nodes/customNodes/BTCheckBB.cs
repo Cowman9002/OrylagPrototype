@@ -6,12 +6,12 @@ public class BTCheckBB : BTNode
 {
     private string m_item;
 
-    public BTCheckBB(string item)
+    public BTCheckBB(string name, string item) : base(name)
     {
         m_item = item;
     }
 
-    public override BTResult Evaluate()
+    public override BTController.BTStateEndData Evaluate()
     {
         bool v;
 
@@ -31,9 +31,9 @@ public class BTCheckBB : BTNode
                 v = ((BBVector)item).value != null;
                 break;
             default:
-                return BTResult.Failure;
+                return controller.EndState(BTResult.Failure);
         }
 
-        return v ? BTResult.Success : BTResult.Failure;
+        return v ? controller.EndState(BTResult.Success) : controller.EndState(BTResult.Failure);
     }
 }
