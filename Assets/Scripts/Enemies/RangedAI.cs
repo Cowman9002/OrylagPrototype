@@ -131,12 +131,31 @@ public class RangedAI : BTController
     {
         foreach (AgentSensor a in agentSensors)
         {
-            if (a.hasTransform(playerTarget))
+            if (a.hasTransform(t))
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Bullet"))
+        {
+            print(healthSelf.CurrentHealth);
+            healthSelf.DecreaseHealth(other.GetComponent<Bullet>().stats.damage, "Player");
+
+            blackBoard.setItem("EnemyWasSeen", new BBBool(true));
+            blackBoard.setItem("EnemyVisible", new BBBool(true));
+
+            print("Hit");
+
+            if (healthSelf.IsDead)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 }

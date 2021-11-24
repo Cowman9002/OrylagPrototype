@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
         body.velocity = transform.forward * stats.speed;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
     }

@@ -7,4 +7,6 @@ public class BulletObject : ScriptableObject
 {
     public float lifeTime;
     public float speed;
+
+    public int damage;
 }

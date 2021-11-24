@@ -11,6 +11,9 @@ public class BTController : MonoBehaviour
     [HideInInspector]
     public NavMeshAgent agentSelf;
 
+    [HideInInspector]
+    public Health healthSelf;
+
     protected Transform lookTarget = null;
 
     protected BTNode root;
@@ -19,6 +22,7 @@ public class BTController : MonoBehaviour
     protected virtual void Start()
     {
         agentSelf = GetComponent<NavMeshAgent>();
+        healthSelf = GetComponent<Health>();
     }
 
     public virtual void FixedUpdate()
@@ -48,7 +52,7 @@ public class BTController : MonoBehaviour
     {
         m_evaluatingNodes.Push(node);
 
-        printDebugStartMessage(node);
+        //printDebugStartMessage(node);
     }
 
     public struct BTStateEndData
@@ -66,7 +70,7 @@ public class BTController : MonoBehaviour
         BTNode node = m_evaluatingNodes.Pop();
         m_evaluatingNodes.Peek().ChildEnded(res);
 
-        PrintDebugEndMessage(node, result);
+        //PrintDebugEndMessage(node, result);
 
         return res;
     }

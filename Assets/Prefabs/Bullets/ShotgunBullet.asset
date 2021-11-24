@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: ShotgunBullet
   m_EditorClassIdentifier: 
   lifeTime: 0.3
-  speed: 30
+  speed: 35
+  damage: 4

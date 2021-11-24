@@ -82,7 +82,7 @@ MonoBehaviour:
   bullet: {fileID: 1265481083953467983, guid: 1ac22691c0f8a8a4fa26555dd66d5f95, type: 3}
   delay: 0.5
   numBullets: 10
-  spreadHalfAngle: 20
+  spreadHalfAngle: 15
 --- !u!82 &5875085398596011132
 AudioSource:
   m_ObjectHideFlags: 0
