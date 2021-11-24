@@ -664,6 +664,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1010152143 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5570238654374280122, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
+  m_PrefabInstance: {fileID: 1040675431174183885}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1016126577 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 868910127691534936, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
@@ -955,6 +960,17 @@ Transform:
   m_Father: {fileID: 2014122369}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1180434590 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5342329504015417629, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
+  m_PrefabInstance: {fileID: 1040675431174183885}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dca78a4e846cb4db48d7580c0f13d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1182220955
 GameObject:
   m_ObjectHideFlags: 0
@@ -1007,7 +1023,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1182220955}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.18, y: 0, z: -12.56}
+  m_LocalPosition: {x: 9.96, y: 0, z: 30.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1333189161}
@@ -1036,7 +1052,7 @@ MonoBehaviour:
   rangedQuery: {fileID: 1182220960}
   idleQuery: {fileID: 1182220962}
   playerTarget: {fileID: 1016126577}
-  memoryTime: 5
+  memoryTime: 12
   nearRange: 6
   farRange: 25
   agentSensors:
@@ -1068,7 +1084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4096
   blackBoard: {fileID: 1182220959}
   numX: 20
   numY: 20
@@ -1096,7 +1112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6144c3d22f10e345a11f10da680a600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneQuery: {fileID: 1182220960}
+  sceneQuery: {fileID: 1182220962}
 --- !u!114 &1182220962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1111,14 +1127,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4097
   blackBoard: {fileID: 1182220959}
   numX: 4
   numY: 4
   width: 10
   height: 10
-  upProjection: 10
-  downProjection: 10
+  upProjection: 5
+  downProjection: 5
   groundOffset: 1
   maxWeight: 1
   rayMask:
@@ -1919,6 +1935,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1040675430608631787, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
+      propertyPath: currentGun
+      value: 
+      objectReference: {fileID: 1180434590}
     - target: {fileID: 1040675430608631790, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1966,6 +1986,14 @@ PrefabInstance:
     - target: {fileID: 1040675430608631791, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3672016477720411663, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
+      propertyPath: shootOrigin
+      value: 
+      objectReference: {fileID: 1010152143}
+    - target: {fileID: 8814420627092289348, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c62b22e840046b84082f349e6ba7d5fd, type: 3}
