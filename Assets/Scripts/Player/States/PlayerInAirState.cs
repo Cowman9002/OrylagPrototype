@@ -26,7 +26,8 @@ public class PlayerInAirState : PlayerLookState
     public override void OnFixedUpdate()
     {
         base.OnFixedUpdate();
-
         controller.Velocity = controller.Velocity + Vector3.up * controller.playerStats.gravity * Time.fixedDeltaTime;
     }
+
+
 }

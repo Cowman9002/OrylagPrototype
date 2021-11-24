@@ -250,7 +250,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1847
+    m_Bits: 5943
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -691,9 +691,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7972093386717970584}
     m_Modifications:
+    - target: {fileID: 2931261670731325184, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450008726418198581, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6773472083242723989, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8066831318553238057, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 8066831318941167196, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
       propertyPath: m_Name
       value: Pistol
+      objectReference: {fileID: 0}
+    - target: {fileID: 8066831318941167196, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8066831318941167199, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -743,6 +763,10 @@ PrefabInstance:
       propertyPath: shootOrigin
       value: 
       objectReference: {fileID: 5570238654374280122}
+    - target: {fileID: 8499372384882665577, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
+      propertyPath: delay
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f92a2eef1d972a04f8882ca2292aad9c, type: 3}
 --- !u!4 &8814420627092289351 stripped

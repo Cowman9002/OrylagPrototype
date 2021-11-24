@@ -39,7 +39,7 @@ public class BTGoToPosition : BTNode
             NavMeshPath path = new NavMeshPath();
             if(!controller.agentSelf.CalculatePath(targPos, path))
             {
-                return controller.EndState(BTResult.Success);
+                return controller.EndState(BTResult.Failure);
             }
 
             controller.agentSelf.SetPath(path);
@@ -49,12 +49,16 @@ public class BTGoToPosition : BTNode
         {
             if (!controller.agentSelf.hasPath)
             {
-                controller.agentSelf.destination = targPos;
+                NavMeshPath path = new NavMeshPath();
+                if (!controller.agentSelf.CalculatePath(targPos, path))
+                {
+                    return controller.EndState(BTResult.Failure);
+                }
+                controller.agentSelf.SetPath(path);
             }
         }
 
-        if (controller.agentSelf.remainingDistance <= controller.agentSelf.stoppingDistance && 
-                controller.agentSelf.pathStatus == NavMeshPathStatus.PathComplete)
+        if (controller.agentSelf.remainingDistance <= controller.agentSelf.stoppingDistance)
         {
             return controller.EndState(BTResult.Success);
         }

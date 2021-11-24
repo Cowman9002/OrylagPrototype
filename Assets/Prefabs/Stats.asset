@@ -73,3 +73,6 @@ MonoBehaviour:
   dashFovDelta: 10
   dashTime: 0.5
   dashSpeed: 20
+  climbLowHeight: 0.6
+  climbHighHeight: 2.2
+  climbDist: 0.7

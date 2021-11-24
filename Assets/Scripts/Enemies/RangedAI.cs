@@ -36,9 +36,9 @@ public class RangedAI : BTController
                         new BTSequencerNode("Shoot", new List<BTNode>
                         {
                             new BTCheckBB(null, "EnemyWasSeen"),
+                            new BTSetLookTarget(null, "Enemy"),
                             new BTCheckBB(null, "CanAttack"),
                             new BTInverter(null, new BTInRange(null, "Enemy", nearRange)),
-                            new BTSetLookTarget(null, "Enemy"),
                             new BTPrint(null, "FIRE"),
                             new BTDelay(null, 1.0f, "CanAttack", false),
                         }),
@@ -52,7 +52,7 @@ public class RangedAI : BTController
                                 new BTRandomLocation(null, "Enemy", 10.0f, "TargetLocation"),
                             }),
                             new BTGoToPosition(null, "TargetLocation", false),
-                            new BTDelay(null, 0.1f, null, false),
+                            new BTDelay(null, 0.5f, "CanAttack", true),
                         }),
                     }),
                     new BTSequencerNode("Idle", new List<BTNode>

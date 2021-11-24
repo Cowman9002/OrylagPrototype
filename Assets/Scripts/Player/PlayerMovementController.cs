@@ -19,6 +19,8 @@ public class PlayerMovementController : MonoBehaviour
     public PlayerJumpState jumpState;
     [HideInInspector]
     public PlayerDashState dashState;
+    [HideInInspector]
+    public PlayerClimbingState climbState;
 
     public Vector3 MovementInput { get; private set; }
     public Vector2 MouseInput { get; private set; }
@@ -90,6 +92,11 @@ public class PlayerMovementController : MonoBehaviour
         Velocity += direction * appliedSpeed;
     }
 
+    public void SetPosition(Vector3 newPos)
+    {
+        m_controller.Move(newPos - transform.position);
+    }
+
     public void RotateYaw(float amount)
     {
         m_yaw = (m_yaw + amount) % 360.0f;
@@ -98,6 +105,11 @@ public class PlayerMovementController : MonoBehaviour
     public void RotatePitch(float amount)
     {
         m_pitch = Mathf.Clamp(m_pitch + amount, playerStats.minYaw, playerStats.maxYaw);
+    }
+
+    public float GetYaw()
+    {
+        return m_yaw;
     }
 
     public void SetFov(float amount)
@@ -122,6 +134,7 @@ public class PlayerMovementController : MonoBehaviour
         fallingState = new PlayerFallingState(this);
         jumpState = new PlayerJumpState(this);
         dashState = new PlayerDashState(this);
+        climbState = new PlayerClimbingState(this);
 
         m_currentState = idleState;
         m_currentState.OnEnter();
@@ -178,5 +191,12 @@ public class PlayerMovementController : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         m_currentState.OnControllerCollision(hit);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(transform.position + Vector3.up * playerStats.climbLowHeight, transform.forward * playerStats.climbDist);
+        Gizmos.DrawRay(transform.position + Vector3.up * playerStats.climbHighHeight, transform.forward * playerStats.climbDist);
     }
 }
