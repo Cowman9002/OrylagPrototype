@@ -36,9 +36,8 @@ public class RangedAI : BTController
                         new BTSequencerNode("Shoot", new List<BTNode>
                         {
                             new BTCheckBB(null, "EnemyWasSeen"),
-                            new BTSetLookTarget(null, "Enemy"),
                             new BTCheckBB(null, "CanAttack"),
-                            new BTInverter(null, new BTInRange(null, "Enemy", nearRange)),
+                            new BTSetLookTarget(null, "Enemy"),
                             new BTPrint(null, "FIRE"),
                             new BTDelay(null, 1.0f, "CanAttack", false),
                         }),
@@ -52,7 +51,6 @@ public class RangedAI : BTController
                                 new BTRandomLocation(null, "Enemy", 10.0f, "TargetLocation"),
                             }),
                             new BTGoToPosition(null, "TargetLocation", false),
-                            new BTDelay(null, 0.5f, "CanAttack", true),
                         }),
                     }),
                     new BTSequencerNode("Idle", new List<BTNode>
@@ -70,7 +68,6 @@ public class RangedAI : BTController
 
     public override void FixedUpdate()
     {
-        base.FixedUpdate();
 
         bool hasHitPlayer = false;
         bool inRange;
@@ -106,6 +103,8 @@ public class RangedAI : BTController
         {
             blackBoard.setItem("EnemyWasSeen", new BBBool(false));
         }
+
+        base.FixedUpdate();
     }
 
     public override void SensorObjectEnter(Transform newObject)
@@ -113,6 +112,7 @@ public class RangedAI : BTController
         if(newObject == playerTarget)
         {
             blackBoard.setItem("EnemyVisible", new BBBool(true));
+            blackBoard.setItem("CanAttack", new BBBool(true));
             blackBoard.setItem("EnemyWasSeen", new BBBool(true));
         }
     }
