@@ -8,16 +8,16 @@ public class PlayerWeaponController : MonoBehaviour
 
     public Gun currentGun;
 
-    private void Start()
-    {
-    }
-
     private void Update()
     {
 
         if(Input.GetMouseButtonDown(0))
         {
-            currentGun.Shoot();
+            currentGun.StartShooting();
+        }
+        else if(Input.GetMouseButtonUp(0))
+        {
+            currentGun.StopShooting();
         }
 
     }

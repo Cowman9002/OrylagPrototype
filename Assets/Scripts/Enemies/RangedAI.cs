@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyTestAI : BTController
+public class RangedAI : BTController
 {
     public LayerMask raycastMask;
 
@@ -18,14 +18,16 @@ public class EnemyTestAI : BTController
 
     public AgentSensor[] agentSensors;
 
-    private float m_forgetPlayerTime;
-    private bool m_playerLost;
+    private float m_forgetTime;
 
     protected override void Start()
     {
         base.Start();
 
+        blackBoard.setItem("Enemy", new BBTransform(playerTarget));
         blackBoard.setItem("EnemyVisible", new BBBool(false));
+        blackBoard.setItem("EnemyWasSeen", new BBBool(false));
+        blackBoard.setItem("CanAttack", new BBBool(false));
 
         root = new BTSelectorNode("Root", new List<BTNode>
                 {
@@ -33,16 +35,16 @@ public class EnemyTestAI : BTController
                     {
                         new BTSequencerNode("Shoot", new List<BTNode>
                         {
-                            new BTCheckBB(null, "Enemy"),
-                            new BTRayCast(null, "Enemy", raycastMask, Vector3.up * 1.7f, farRange, 0.0f),
+                            new BTCheckBB(null, "EnemyWasSeen"),
+                            new BTCheckBB(null, "CanAttack"),
                             new BTInverter(null, new BTInRange(null, "Enemy", nearRange)),
                             new BTSetLookTarget(null, "Enemy"),
                             new BTPrint(null, "FIRE"),
-                            new BTDelay(null, 1.0f, null, false),
+                            new BTDelay(null, 1.0f, "CanAttack", false),
                         }),
                         new BTSequencerNode("GoToAttackLocation", new List<BTNode>
                         {
-                            new BTCheckBB(null, "Enemy"),
+                            new BTCheckBB(null, "EnemyWasSeen"),
                             new BTSetLookTarget(null, null),
                             new BTSelectorNode("Select Attack location", new List<BTNode>
                             {
@@ -66,23 +68,52 @@ public class EnemyTestAI : BTController
         BeginState(root);
     }
 
-    private void Update()
+    public override void FixedUpdate()
     {
-        //if(Time.time >= m_forgetPlayerTime && m_playerLost)
-        //{
-        //    blackBoard.setItem("Enemy", null);
-        //    m_playerLost = false;
-        //    print("Player Lost");
-        //}
+        base.FixedUpdate();
+
+        bool hasHitPlayer = false;
+        bool inRange;
+
+        float sqrDst = Vector3.SqrMagnitude(playerTarget.position - transform.position);
+        inRange = sqrDst > nearRange * nearRange && sqrDst < farRange * farRange;
+
+        Vector3 rayOrigin = transform.position + Vector3.up * 1.7f;
+        Vector3 rayDirection = (playerTarget.position - rayOrigin).normalized;
+        RaycastHit hit;
+
+        if(Physics.Raycast(new Ray(rayOrigin, rayDirection), out hit, farRange, raycastMask))
+        {
+            if (hit.transform == playerTarget)
+            {
+                hasHitPlayer = true;
+            }
+        }
+
+        blackBoard.setItem("CanAttack", new BBBool(hasHitPlayer && inRange));
+
+
+        if(!hasHitPlayer)
+        {
+            m_forgetTime = Time.time + memoryTime;
+        }
+        else
+        {
+            m_forgetTime = 0;
+        }
+
+        if (Time.time >= m_forgetTime && m_forgetTime != 0)
+        {
+            blackBoard.setItem("EnemyWasSeen", new BBBool(false));
+        }
     }
 
     public override void SensorObjectEnter(Transform newObject)
     {
         if(newObject == playerTarget)
         {
-            blackBoard.setItem("Enemy", new BBTransform(playerTarget));
             blackBoard.setItem("EnemyVisible", new BBBool(true));
-            m_playerLost = false;
+            blackBoard.setItem("EnemyWasSeen", new BBBool(true));
         }
     }
     public override void SensorObjectExit(Transform newObject)
@@ -91,8 +122,6 @@ public class EnemyTestAI : BTController
         {
             if (!CheckForTransform(newObject))
             {
-                m_forgetPlayerTime = Time.time + memoryTime;
-                m_playerLost = true;
                 blackBoard.setItem("EnemyVisible", new BBBool(false));
             }
         }

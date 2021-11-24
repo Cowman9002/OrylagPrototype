@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SQTest : SceneQuery
+public class SQRanged : SceneQuery
 {
     public float nearRange;
     public float farRange;

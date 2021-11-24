@@ -38,7 +38,6 @@ public class BTSelectorNode : BTFlowNode
                     return controller.EndState(BTResult.Success);
 
                 case BTResult.Failure:
-                    Debug.Log(node.Name + " Failed");
                     break;
             }
         }

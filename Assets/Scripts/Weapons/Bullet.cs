@@ -8,27 +8,26 @@ public class Bullet : MonoBehaviour
     public BulletObject stats;
     private Rigidbody body;
 
-    GameObject gfx;
-
-    public void Initialize(Transform gfxOrigin)
+    public void SetGFXPosition(Vector3 pos)
     {
-        gfx = Instantiate(stats.gfx, gfxOrigin.position, gfxOrigin.rotation);
-        gfx.transform.SetParent(transform);
+        Transform gfx = transform.GetChild(0);
+
+        if (gfx)
+        {
+            gfx.position = pos;
+        }
     }
 
     void Start()
     {
         Destroy(gameObject, stats.lifeTime);
-        Destroy(gfx, stats.lifeTime);
 
         body = GetComponent<Rigidbody>();
-
         body.velocity = transform.forward * stats.speed;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         Destroy(gameObject);
-        Destroy(gfx);
     }
 }

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public GameObject bullet;
-    public Transform bulletOrigin;
+    public Transform graphicsOrigin;
     public Transform shootOrigin;
 
-    public void Shoot()
-    {
-        Bullet b = Instantiate(bullet, shootOrigin.position, shootOrigin.rotation).GetComponent<Bullet>();
-        b.Initialize(bulletOrigin);
-    }
+    public virtual void StartShooting() { Fire(); }
+
+    public virtual void StopShooting() { }
+
+    protected virtual void Fire() { }
+
 }

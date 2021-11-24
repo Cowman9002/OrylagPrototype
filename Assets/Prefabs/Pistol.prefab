@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8066831318941167199}
-  - component: {fileID: 8066831318941167198}
+  - component: {fileID: 8499372384882665577}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -63,7 +63,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8066831318941167198
+--- !u!114 &8499372384882665577
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72,12 +72,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8066831318941167196}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c13f2de8720f6b4c957e501cb3279db, type: 3}
+  m_Script: {fileID: 11500000, guid: 80141f3b75ab55e42941c10e36d70c1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 0}
-  bulletOrigin: {fileID: 8066831318553238056}
+  graphicsOrigin: {fileID: 8066831318553238056}
   shootOrigin: {fileID: 0}
+  bullet: {fileID: 1265481083953467983, guid: 80ab3a48224bf744b9c7f6fd88b8d302, type: 3}
+  delay: 0.15
 --- !u!1001 &2624621273277637201
 PrefabInstance:
   m_ObjectHideFlags: 0
