@@ -9,6 +9,8 @@ public class Shotgun : SemiAutoGun
 
     protected override void Fire()
     {
+        PlayShootSound();
+
         for (uint i = 0; i < numBullets; i++)
         {
             float anglex = Random.Range(-spreadHalfAngle, spreadHalfAngle);
