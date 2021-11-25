@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SemiAutoGun : Gun
 {
@@ -10,12 +12,14 @@ public class SemiAutoGun : Gun
 
     private float m_nextShootTime = 0;
 
-    public override void StartShooting()
+    public override void StartShooting(TextMeshProUGUI clipAmmoText)
     {
-        if(Time.time > m_nextShootTime)
+        if(Time.time > m_nextShootTime && m_ammo > 0)
         {
             m_nextShootTime = Time.time + delay;
+            m_ammo -= 1;
             Fire();
+            RefreshGUI(clipAmmoText);
         }
     }
 

@@ -78,6 +78,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graphicsOrigin: {fileID: 5560420514392418593}
   shootOrigin: {fileID: 5560420514392418593}
+  clipSize: 4
+  ammoUsage: 3
   shootSound: {fileID: 8300000, guid: 88d990a94d342f443997e8a090634e78, type: 3}
   bullet: {fileID: 1265481083953467983, guid: 1ac22691c0f8a8a4fa26555dd66d5f95, type: 3}
   delay: 0.5
@@ -94,7 +96,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

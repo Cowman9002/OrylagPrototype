@@ -44,4 +44,7 @@ public class PlayerStats : ScriptableObject
     public float climbLowHeight;
     public float climbHighHeight;
     public float climbDist;
+
+    [Header("Ammo")]
+    public int maxAmmo;
 }

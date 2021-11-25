@@ -77,6 +77,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graphicsOrigin: {fileID: 8066831318553238056}
   shootOrigin: {fileID: 0}
+  clipSize: 6
+  ammoUsage: 0
+  shootSound: {fileID: 0}
   bullet: {fileID: 1265481083953467983, guid: 80ab3a48224bf744b9c7f6fd88b8d302, type: 3}
   delay: 0.15
 --- !u!1001 &2624621273277637201

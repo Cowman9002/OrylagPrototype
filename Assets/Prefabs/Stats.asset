@@ -76,3 +76,4 @@ MonoBehaviour:
   climbLowHeight: 0.6
   climbHighHeight: 2.2
   climbDist: 0.7
+  maxAmmo: 100
