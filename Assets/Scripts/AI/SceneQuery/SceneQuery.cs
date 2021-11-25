@@ -72,7 +72,7 @@ public class SceneQuery : MonoBehaviour
             for (int x = 0; x < numX; x++)
             {
                 Vector3 pointPosition = new Vector3(x * dx + transform.position.x - cx, 
-                                                    transform.position.y, 
+                                                    transform.position.y + groundOffset, 
                                                     y * dy + transform.position.z - cy);
 
                 // up ray cast

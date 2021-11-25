@@ -39,4 +39,12 @@ public class PlayerStats : ScriptableObject
     public float dashFovDelta;
     public float dashTime;
     public float dashSpeed;
+
+    [Header("Climb")]
+    public float climbLowHeight;
+    public float climbHighHeight;
+    public float climbDist;
+
+    [Header("Ammo")]
+    public int maxAmmo;
 }

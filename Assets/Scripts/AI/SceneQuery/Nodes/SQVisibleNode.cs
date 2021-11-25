@@ -20,6 +20,7 @@ public class SQVisibleNode : SQNode
     public override bool PerformQuery(ref List<SceneQuery.QueryPoint> points)
     {
         Vector3 targPos;
+        Transform targTransform = null;
 
         if (m_target == null)
         {
@@ -32,9 +33,11 @@ public class SQVisibleNode : SQNode
             {
                 case BlackBoardItem.EType.Transform:
                     targPos = ((BBTransform)item).value.position;
+                    targTransform = ((BBTransform)item).value;
                     break;
                 case BlackBoardItem.EType.Agent:
                     targPos = ((BBAgent)item).value.transform.position;
+                    targTransform = ((BBTransform)item).value.transform;
                     break;
                 case BlackBoardItem.EType.Vector:
                     targPos = ((BBVector)item).value;
@@ -54,10 +57,19 @@ public class SQVisibleNode : SQNode
 
             if(Physics.Raycast(new Ray(p.position, dir), out hit, Mathf.Infinity, m_rayMask))
             {
-                if((targPos - hit.point).sqrMagnitude <= m_radius * m_radius)
+                if(targTransform != null)
                 {
-                    visible = true;
-                    //Debug.DrawLine(p.position, hit.point);
+                    if(hit.transform == targTransform)
+                    {
+                        visible = true;
+                    }
+                }
+                else
+                {
+                    if ((targPos - hit.point).sqrMagnitude <= m_radius * m_radius)
+                    {
+                        visible = true;
+                    }
                 }
             }
 

@@ -35,7 +35,6 @@ public class BTSequencerNode : BTFlowNode
                     return controller.EndState(BTResult.Running);
 
                 case BTResult.Success:
-                    Debug.Log(node.Name + " Succeeded");
                     break;
 
                 case BTResult.Failure:

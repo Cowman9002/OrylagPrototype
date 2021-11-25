@@ -9,7 +9,7 @@ public class SQIdle : SceneQuery
     void Start()
     {
         nodes.Add(new SQVisibleNode(this, null, rayMask, 0.5f, false));
-        nodes.Add(new SQRandomNode(this, 0.0f, 1.0f));
+        nodes.Add(new SQRandomNode(this, 0.1f, 1.0f));
         nodes.Add(new SQDotProduct(this, null, true, true, 0.3f));
     }
 }

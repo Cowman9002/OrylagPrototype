@@ -8,7 +8,11 @@ public class BTController : MonoBehaviour
 {
     public AIBlackBoard blackBoard;
 
+    [HideInInspector]
     public NavMeshAgent agentSelf;
+
+    [HideInInspector]
+    public Health healthSelf;
 
     protected Transform lookTarget = null;
 
@@ -18,9 +22,10 @@ public class BTController : MonoBehaviour
     protected virtual void Start()
     {
         agentSelf = GetComponent<NavMeshAgent>();
+        healthSelf = GetComponent<Health>();
     }
 
-    public void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         if (lookTarget != null)
         {
@@ -47,15 +52,7 @@ public class BTController : MonoBehaviour
     {
         m_evaluatingNodes.Push(node);
 
-        string stack = node.Name + " has begun : { ";
-
-        foreach (BTNode n in m_evaluatingNodes)
-        {
-            stack += n.Name + ", ";
-        }
-
-        stack += " }";
-        print(stack);
+        //printDebugStartMessage(node);
     }
 
     public struct BTStateEndData
@@ -73,6 +70,26 @@ public class BTController : MonoBehaviour
         BTNode node = m_evaluatingNodes.Pop();
         m_evaluatingNodes.Peek().ChildEnded(res);
 
+        //PrintDebugEndMessage(node, result);
+
+        return res;
+    }
+
+    private void printDebugStartMessage(BTNode node)
+    {
+        string stack = node.Name + " has begun : { ";
+
+        foreach (BTNode n in m_evaluatingNodes)
+        {
+            stack += n.Name + ", ";
+        }
+
+        stack += " }";
+        print(stack);
+    }
+
+    private void PrintDebugEndMessage(BTNode node, BTNode.BTResult result)
+    {
         string stack = node.Name + " has ended with " + result + " : { ";
 
         foreach (BTNode n in m_evaluatingNodes)
@@ -82,7 +99,5 @@ public class BTController : MonoBehaviour
 
         stack += " }";
         print(stack);
-
-        return res;
     }
 }

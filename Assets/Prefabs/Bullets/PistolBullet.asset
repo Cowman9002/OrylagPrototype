@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e761c01d1f1304c9babb4e0705b2a8, type: 3}
   m_Name: PistolBullet
   m_EditorClassIdentifier: 
-  gfx: {fileID: 1265481083953467983, guid: 5fdc0773832000f47b2d70f16a55ee5e, type: 3}
   lifeTime: 5
   speed: 50
+  damage: 3
