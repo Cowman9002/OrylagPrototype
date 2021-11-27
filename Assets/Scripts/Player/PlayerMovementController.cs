@@ -22,6 +22,8 @@ public class PlayerMovementController : MonoBehaviour
     [HideInInspector]
     public PlayerClimbingState climbState;
 
+    public int numJumpsDone = 0;
+
     public Vector3 MovementInput { get; private set; }
     public Vector2 MouseInput { get; private set; }
     public bool JumpInput { get; private set; }
@@ -112,15 +114,6 @@ public class PlayerMovementController : MonoBehaviour
         return m_yaw;
     }
 
-    public void SetFov(float amount)
-    {
-        viewCamera.fieldOfView = amount;
-    }
-    public float GetFov()
-    {
-        return viewCamera.fieldOfView;
-    }
-
     private void Start()
     {
         m_controller = GetComponent<CharacterController>();
@@ -141,6 +134,10 @@ public class PlayerMovementController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
 
+        if(playerStats.baseFOV == 0)
+        {
+            playerStats.baseFOV = viewCamera.fieldOfView;
+        }
     }
 
     private void Update()
@@ -151,6 +148,9 @@ public class PlayerMovementController : MonoBehaviour
         // apply transforms
         transform.rotation = Quaternion.AngleAxis(m_yaw, Vector3.up);
         viewTransform.localRotation = Quaternion.AngleAxis(-m_pitch, Vector3.right);
+
+        float targFov = Mathf.Lerp(playerStats.baseFOV, playerStats.maxFOV, Velocity.magnitude / playerStats.maxFOVSpeed);
+        viewCamera.fieldOfView = Mathf.Lerp(viewCamera.fieldOfView, targFov, Time.deltaTime * playerStats.FOVChangeSpeed);
     }
 
     private void FixedUpdate()

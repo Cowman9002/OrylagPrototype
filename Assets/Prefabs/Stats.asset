@@ -17,6 +17,10 @@ MonoBehaviour:
     m_Bits: 256
   gravity: -9.81
   inputBufferTime: 0.1
+  maxFOVSpeed: 30
+  baseFOV: 90
+  maxFOV: 120
+  FOVChangeSpeed: 20
   dashSound: {fileID: 8300000, guid: b13a1b31126196d4aa5dd394258fdc5f, type: 3}
   movementSpeed: 15
   airSpeed: 6
@@ -24,53 +28,11 @@ MonoBehaviour:
   airAccel: 3
   runAccel: 10
   jumpPower: 5
+  numJumps: 2
   maxYaw: 90
   minYaw: -80
   groundFriction: 0.3
   dashCooldown: 1
-  dashCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 4.2744293
-      outSlope: 4.2744293
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.22938243
-      value: 0.98047894
-      inSlope: -0.012814425
-      outSlope: -0.012814425
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.2111054
-    - serializedVersion: 3
-      time: 0.79919255
-      value: 0.97547257
-      inSlope: -0.14971787
-      outSlope: -0.14971787
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.16711912
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -4.857751
-      outSlope: -4.857751
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  dashFovDelta: 10
   dashTime: 0.5
   dashSpeed: 20
   climbLowHeight: 0.6

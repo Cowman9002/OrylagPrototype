@@ -10,6 +10,12 @@ public class PlayerStats : ScriptableObject
     public float gravity;
     public float inputBufferTime;
 
+    [Header("FOV")]
+    public float maxFOVSpeed;
+    public float baseFOV;
+    public float maxFOV;
+    public float FOVChangeSpeed;
+
     [Header("Sounds")]
     public AudioClip dashSound;
 
@@ -25,6 +31,7 @@ public class PlayerStats : ScriptableObject
 
     [Header("Jump")]
     public float jumpPower;
+    public float numJumps;
 
     [Header("Constraints")]
     public float maxYaw;
@@ -35,8 +42,6 @@ public class PlayerStats : ScriptableObject
 
     [Header("Dash")]
     public float dashCooldown;
-    public AnimationCurve dashCurve;
-    public float dashFovDelta;
     public float dashTime;
     public float dashSpeed;
 

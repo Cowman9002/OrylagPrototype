@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    public GameObject hitParticles;
+
     public int maxHealth;
     public int CurrentHealth { get; private set; }
 
@@ -22,12 +24,18 @@ public class Health : MonoBehaviour
         LastInjuryCause = null;
     }
 
-    public void DecreaseHealth(int amount, string cause)
+    public void DecreaseHealth(int amount, Vector3 hitPos, Vector3 hitDir, string cause)
     {
         if (IsDead) return;
 
         LastInjuryCause = cause;
         CurrentHealth -= amount;
+
+        if(hitParticles)
+        {
+            GameObject go = GameObject.Instantiate(hitParticles, hitPos, Quaternion.LookRotation(hitDir));
+            GameObject.Destroy(go, go.GetComponent<ParticleSystem>().main.duration);
+        }
 
         if (CurrentHealth <= 0) IsDead = true;
     }

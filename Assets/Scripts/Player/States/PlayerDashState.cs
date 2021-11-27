@@ -8,11 +8,6 @@ public class PlayerDashState : PlayerLookState
 
     private float m_endTime;
 
-    private float m_originalFov;
-
-    private float m_td;
-    private float m_t;
-
     public override void OnEnter()
     {
         base.OnEnter();
@@ -33,19 +28,17 @@ public class PlayerDashState : PlayerLookState
         controller.Velocity = direction * controller.playerStats.dashSpeed;
 
         m_endTime = Time.time + controller.playerStats.dashTime;
-        m_originalFov = controller.GetFov();
-
-        m_td = 1.0f / controller.playerStats.dashTime;
-        m_t = 0.0f;
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
 
-        m_t += m_td * Time.deltaTime;
-        float fov = m_originalFov + controller.playerStats.dashCurve.Evaluate(m_t) * controller.playerStats.dashFovDelta;
-        controller.SetFov(fov);
+        if (controller.JumpInput && controller.numJumpsDone < controller.playerStats.numJumps)
+        {
+            controller.ChangeState(controller.jumpState);
+            return;
+        }
 
         if (Time.time >= m_endTime)
         {
@@ -66,7 +59,6 @@ public class PlayerDashState : PlayerLookState
 
     private void ExitState()
     {
-        controller.SetFov(m_originalFov);
         if (controller.IsGrounded)
         {
             controller.ChangeState(controller.idleState);

@@ -10,7 +10,7 @@ public class BTPrint : BTNode
 
     public override BTController.BTStateEndData Evaluate()
     {
-        Debug.Log(m_message);
+        Debug.Log(controller.ToString() + m_message);
         return controller.EndState(BTResult.Success);
     }
 }

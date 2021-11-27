@@ -63,6 +63,8 @@ public class BTGoToPosition : BTNode
             return controller.EndState(BTResult.Success);
         }
 
+        Debug.DrawRay(targPos, Vector3.up, Color.yellow);
+
         return controller.EndState(BTResult.Running);
     }
 }

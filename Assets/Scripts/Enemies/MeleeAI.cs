@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RangedAI : BTController
+public class MeleeAI: BTController
 {
     public LayerMask raycastMask;
+
+    public GameObject hurtBox;
+
+    public Animator animator;
 
     public SceneQuery rangedQuery;
     public SceneQuery idleQuery;
 
-    public GameObject attackObj;
-
-    public Transform nose;
-    public Transform attackOrigin;
     public Transform playerTarget;
     public float memoryTime;
 
@@ -28,7 +28,6 @@ public class RangedAI : BTController
     {
         base.Start();
 
-        blackBoard.setItem("attackOrigin", new BBTransform(attackOrigin));
         blackBoard.setItem("Enemy", new BBTransform(playerTarget));
         blackBoard.setItem("EnemyVisible", new BBBool(false));
         blackBoard.setItem("EnemyWasSeen", new BBBool(false));
@@ -38,12 +37,12 @@ public class RangedAI : BTController
                 {
                     new BTSelectorNode("Attack", new List<BTNode>
                     {
-                        new BTSequencerNode("Shoot", new List<BTNode>
+                        new BTSequencerNode("Attack", new List<BTNode>
                         {
                             new BTCheckBB(null, "EnemyWasSeen"),
                             new BTCheckBB(null, "CanAttack"),
                             new BTSetLookTarget(null, "Enemy"),
-                            new BTSpawnObject(null, "attackOrigin", attackObj),
+                            new BTAnimate(null, animator, "Attack"),
                             new BTDelay(null, 1.0f, "CanAttack", false),
                         }),
                         new BTSequencerNode("GoToAttackLocation", new List<BTNode>
@@ -53,7 +52,7 @@ public class RangedAI : BTController
                             new BTSelectorNode("Select Attack location", new List<BTNode>
                             {
                                 new BTSQNode(null, rangedQuery, "TargetLocation"),
-                                new BTRandomLocation(null, "Enemy", 10.0f, "TargetLocation"),
+                                new BTRandomLocation(null, "Enemy", farRange, "TargetLocation"),
                             }),
                             new BTGoToPosition(null, "TargetLocation", false),
                         }),
@@ -95,7 +94,6 @@ public class RangedAI : BTController
         if(hasHitPlayer && inRange)
         {
             blackBoard.setItem("CanAttack", new BBBool(true));
-            AimAtPlayer();
         }
         else
         {
@@ -139,11 +137,6 @@ public class RangedAI : BTController
         }
     }
 
-    private void AimAtPlayer()
-    {
-        nose.rotation = Quaternion.LookRotation((playerTarget.position - attackOrigin.position).normalized);
-    }
-
     private bool CheckForTransform(Transform t)
     {
         foreach (AgentSensor a in agentSensors)
@@ -171,5 +164,15 @@ public class RangedAI : BTController
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void EnableHurtBox()
+    {
+        hurtBox.SetActive(true);
+    }
+
+    public void DisableHurtBox()
+    {
+        hurtBox.SetActive(false);
     }
 }

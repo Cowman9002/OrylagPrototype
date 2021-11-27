@@ -9,6 +9,7 @@ public class PlayerGroundState : PlayerLookState
     public override void OnEnter()
     {
         controller.Velocity = new Vector3(controller.Velocity.x, 0.0f, controller.Velocity.z);
+        controller.numJumpsDone = 0;
     }
 
     public override void OnUpdate()
@@ -19,7 +20,7 @@ public class PlayerGroundState : PlayerLookState
         {
             controller.ChangeState(controller.fallingState);
         }
-        else if(controller.JumpInput)
+        else if(controller.JumpInput && controller.numJumpsDone < controller.playerStats.numJumps)
         {
             controller.ChangeState(controller.jumpState);
             return;
