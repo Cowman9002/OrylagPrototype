@@ -23,6 +23,8 @@ public class BTController : MonoBehaviour
     {
         agentSelf = GetComponent<NavMeshAgent>();
         healthSelf = GetComponent<Health>();
+
+        agentSelf.avoidancePriority = Random.Range(0, 100);
     }
 
     public virtual void FixedUpdate()

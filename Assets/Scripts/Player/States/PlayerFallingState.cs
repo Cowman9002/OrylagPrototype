@@ -14,6 +14,11 @@ public class PlayerFallingState : PlayerInAirState
         {
             controller.ChangeState(controller.dashState);
         }
+        else if (controller.JumpInput && controller.numJumpsDone < controller.playerStats.numJumps)
+        {
+            controller.ChangeState(controller.jumpState);
+            return;
+        }
     }
 
     public override void OnFixedUpdate()
