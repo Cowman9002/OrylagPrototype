@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerGroundState : PlayerLookState
+public class PlayerGroundState : SlopeClimbState
 {
-    public PlayerGroundState(PlayerMovementController controller) : base(controller) { }
+    public PlayerGroundState(PlayerMovementController controller) : base(controller) 
+    {
+    }
 
     public override void OnEnter()
     {
@@ -16,11 +18,7 @@ public class PlayerGroundState : PlayerLookState
     {
         base.OnUpdate();
 
-        if(!controller.IsGrounded)
-        {
-            controller.ChangeState(controller.fallingState);
-        }
-        else if(controller.JumpInput && controller.numJumpsDone < controller.playerStats.numJumps)
+        if(controller.JumpInput && controller.numJumpsDone < controller.playerStats.numJumps)
         {
             controller.ChangeState(controller.jumpState);
             return;
@@ -35,6 +33,18 @@ public class PlayerGroundState : PlayerLookState
     {
         base.OnFixedUpdate();
 
-        controller.Velocity = controller.Velocity - controller.Velocity * controller.playerStats.groundFriction;
+        Vector3 normal;
+        float height;
+        if(GetGroundNormal(out normal, out height))
+        {
+            controller.Velocity = CaclSlopeDirection(normal);
+            SnapToGround(height);
+
+            controller.Velocity = controller.Velocity - controller.Velocity * controller.playerStats.groundFriction;
+        }
+        else
+        {
+            controller.ChangeState(controller.fallingState);
+        }
     }
 }
