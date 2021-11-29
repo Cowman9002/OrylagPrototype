@@ -9,6 +9,8 @@ public class PlayerMovementController : MonoBehaviour
     public Transform viewTransform;
     public Camera viewCamera;
 
+    public LayerMask groundMask;
+
     [HideInInspector]
     public PlayerIdleState idleState;
     [HideInInspector]
@@ -123,7 +125,7 @@ public class PlayerMovementController : MonoBehaviour
 
         // Create States
         idleState = new PlayerIdleState(this);
-        runState = new PlayerRunState(this);
+        runState = new PlayerRunState(this, groundMask);
         fallingState = new PlayerFallingState(this);
         jumpState = new PlayerJumpState(this);
         dashState = new PlayerDashState(this);

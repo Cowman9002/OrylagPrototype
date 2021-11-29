@@ -324,6 +324,10 @@ MonoBehaviour:
   playerStats: {fileID: 11400000, guid: 79308da437241064e8560760ba4c3e86, type: 2}
   viewTransform: {fileID: 6373302171422285582}
   viewCamera: {fileID: 1040675430223591102}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  numJumpsDone: 0
 --- !u!114 &1040675430608631787
 MonoBehaviour:
   m_ObjectHideFlags: 0
