@@ -11,11 +11,11 @@ public class PlayerHealthManager : MonoBehaviour
 
     public PlayerMovementController playerMovement;
 
-    private void Start()
-    {
-        healthBar.maxValue = health.maxHealth;
-        healthBar.value = health.CurrentHealth;
-    }
+    //public void Start()
+    //{
+    //    healthBar.maxValue = health.maxHealth;
+    //    healthBar.value = health.CurrentHealth;
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -23,7 +23,7 @@ public class PlayerHealthManager : MonoBehaviour
         {
             int dmg = other.GetComponent<Bullet>().stats.damage;
             health.DecreaseHealth(dmg, other.transform.position, -other.transform.forward, "Enemy");
-            healthBar.value -= dmg;
+            healthBar.value = health.CurrentHealth;
 
             playerMovement.PlaySound(playerMovement.playerStats.hurtSound);
 
@@ -36,7 +36,7 @@ public class PlayerHealthManager : MonoBehaviour
         {
             int dmg = other.GetComponent<HurtBox>().GetDamage();
             health.DecreaseHealth(dmg, other.ClosestPoint(transform.position), -other.transform.forward, "Enemy");
-            healthBar.value -= dmg;
+            healthBar.value = health.CurrentHealth;
 
             playerMovement.PlaySound(playerMovement.playerStats.hurtSound);
 

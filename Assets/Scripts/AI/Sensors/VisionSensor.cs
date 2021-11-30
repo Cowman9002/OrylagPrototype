@@ -109,23 +109,23 @@ public class VisionSensor : AgentSensor
         return res;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.green;
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.green;
 
-        Vector3 startDir = Quaternion.AngleAxis(halfViewAngle, Vector3.up) * transform.forward;
-        Vector3 endDir = Quaternion.AngleAxis(halfViewAngle, -Vector3.up) * transform.forward;
+    //    Vector3 startDir = Quaternion.AngleAxis(halfViewAngle, Vector3.up) * transform.forward;
+    //    Vector3 endDir = Quaternion.AngleAxis(halfViewAngle, -Vector3.up) * transform.forward;
 
-        Gizmos.DrawRay(transform.position, startDir * viewRadius);
-        Gizmos.DrawRay(transform.position, endDir * viewRadius);
+    //    Gizmos.DrawRay(transform.position, startDir * viewRadius);
+    //    Gizmos.DrawRay(transform.position, endDir * viewRadius);
 
-        Gizmos.color = Color.grey;
-        Gizmos.DrawRay(transform.position, transform.forward * viewRadius);
+    //    Gizmos.color = Color.grey;
+    //    Gizmos.DrawRay(transform.position, transform.forward * viewRadius);
 
-        UnityEditor.Handles.color = Color.yellow;
-        UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, viewRadius);
+    //    UnityEditor.Handles.color = Color.yellow;
+    //    UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, viewRadius);
 
-        UnityEditor.Handles.color = Color.green;
-        UnityEditor.Handles.DrawWireArc(transform.position, Vector3.up, endDir, halfViewAngle * 2, viewRadius * 0.2f);
-    }
+    //    UnityEditor.Handles.color = Color.green;
+    //    UnityEditor.Handles.DrawWireArc(transform.position, Vector3.up, endDir, halfViewAngle * 2, viewRadius * 0.2f);
+    //}
 }
