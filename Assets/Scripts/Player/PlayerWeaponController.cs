@@ -8,8 +8,7 @@ public class PlayerWeaponController : MonoBehaviour
 {
     public PlayerStats playerStats;
 
-    public TextMeshProUGUI clipAmmoText;
-    public TextMeshProUGUI reserveAmmoText;
+    public TextMeshProUGUI ammoText;
     public TextMeshProUGUI ammoUsageText;
 
     public PlayerMovementController playerMovement;
@@ -23,7 +22,8 @@ public class PlayerWeaponController : MonoBehaviour
 
     private void Start()
     {
-        guns[m_currentGun].RefreshGUI(clipAmmoText, ammoUsageText, reserveAmmoText, ref ammo);
+        RefreshGUI();
+        guns[m_currentGun].RefreshAmmoGui(ammoText, ammo);
     }
 
     private void Update()
@@ -34,32 +34,32 @@ public class PlayerWeaponController : MonoBehaviour
             guns[m_currentGun].gameObject.SetActive(false);
             m_currentGun = (m_currentGun + 1) % (uint)guns.Length;
             guns[m_currentGun].gameObject.SetActive(true);
-            guns[m_currentGun].RefreshGUI(clipAmmoText, ammoUsageText, reserveAmmoText, ref ammo);
+            RefreshGUI();
         }
 
         if(Input.GetMouseButtonDown(0))
         {
-            guns[m_currentGun].StartShooting(clipAmmoText);
+            guns[m_currentGun].StartShooting(ammoText, ref ammo);
         }
         else if(Input.GetMouseButtonUp(0))
         {
             guns[m_currentGun].StopShooting();
         }
-
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            guns[m_currentGun].Reload(clipAmmoText, reserveAmmoText, ref ammo);
-        }
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Ammo"))
         {
+            playerMovement.PlaySound(playerMovement.playerStats.ammoPickup);
             ammo = Math.Min(ammo + ammoBoxAmount, playerStats.maxAmmo);
-            guns[m_currentGun].RefreshGUI(clipAmmoText, reserveAmmoText, ref ammo);
+            guns[m_currentGun].RefreshAmmoGui(ammoText, ammo);
             Destroy(other.gameObject);
         }
+    }
+
+    private void RefreshGUI()
+    {
+        ammoUsageText.text = string.Format("({0})", guns[m_currentGun].ammoUsage);
     }
 }

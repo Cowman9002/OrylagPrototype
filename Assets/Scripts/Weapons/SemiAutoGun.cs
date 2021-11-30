@@ -12,21 +12,22 @@ public class SemiAutoGun : Gun
 
     private float m_nextShootTime = 0;
 
-    public override void StartShooting(TextMeshProUGUI clipAmmoText)
+    public override void StartShooting(TextMeshProUGUI ammoText, ref int ammo)
     {
-        if(Time.time > m_nextShootTime && m_ammo > 0)
+        if(Time.time > m_nextShootTime && ammo >= ammoUsage)
         {
+            PlayShootSound();
+
             m_nextShootTime = Time.time + delay;
-            m_ammo -= 1;
+            ammo -= ammoUsage;
             Fire();
-            RefreshGUI(clipAmmoText);
+            RefreshAmmoGui(ammoText, ammo);
         }
     }
 
     protected override void Fire()
     {
         base.Fire();
-
         GameObject logic = Instantiate(bullet, shootOrigin.position, shootOrigin.rotation);
         logic.GetComponent<Bullet>().SetGFXPosition(graphicsOrigin.position);
     }

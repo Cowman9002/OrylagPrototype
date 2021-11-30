@@ -80,7 +80,7 @@ MonoBehaviour:
   shootOrigin: {fileID: 5560420514392418593}
   clipSize: 4
   ammoUsage: 3
-  shootSound: {fileID: 8300000, guid: 88d990a94d342f443997e8a090634e78, type: 3}
+  shootSound: {fileID: 8300000, guid: 75f727d1fc0c01745adc19cd59c0b67d, type: 3}
   bullet: {fileID: 1265481083953467983, guid: 1ac22691c0f8a8a4fa26555dd66d5f95, type: 3}
   delay: 0.5
   numBullets: 30

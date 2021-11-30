@@ -24,9 +24,13 @@ public class RangedAI : BTController
 
     private float m_forgetTime;
 
+    private AudioSource m_shootSound;
+
     protected override void Start()
     {
         base.Start();
+
+        m_shootSound = GetComponent<AudioSource>();
 
         blackBoard.setItem("attackOrigin", new BBTransform(attackOrigin));
         blackBoard.setItem("Enemy", new BBTransform(playerTarget));
@@ -43,6 +47,7 @@ public class RangedAI : BTController
                             new BTCheckBB(null, "EnemyWasSeen"),
                             new BTCheckBB(null, "CanAttack"),
                             new BTSetLookTarget(null, "Enemy"),
+                            new BTPlaySound(null, m_shootSound),
                             new BTSpawnObject(null, "attackOrigin", attackObj),
                             new BTDelay(null, 1.0f, "CanAttack", false),
                         }),

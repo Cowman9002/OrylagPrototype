@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitParticles: {fileID: 3783114819389893986, guid: 320bdf291edfb6d4384c5a502526d11f, type: 3}
-  maxHealth: 150
+  maxHealth: 75
 --- !u!114 &5860160973772193834
 MonoBehaviour:
   m_ObjectHideFlags: 0

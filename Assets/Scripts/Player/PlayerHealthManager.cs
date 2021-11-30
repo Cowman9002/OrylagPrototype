@@ -9,6 +9,8 @@ public class PlayerHealthManager : MonoBehaviour
     public Health health;
     public Slider healthBar;
 
+    public PlayerMovementController playerMovement;
+
     private void Start()
     {
         healthBar.maxValue = health.maxHealth;
@@ -23,6 +25,8 @@ public class PlayerHealthManager : MonoBehaviour
             health.DecreaseHealth(dmg, other.transform.position, -other.transform.forward, "Enemy");
             healthBar.value -= dmg;
 
+            playerMovement.PlaySound(playerMovement.playerStats.hurtSound);
+
             if (health.IsDead)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -33,6 +37,8 @@ public class PlayerHealthManager : MonoBehaviour
             int dmg = other.GetComponent<HurtBox>().GetDamage();
             health.DecreaseHealth(dmg, other.ClosestPoint(transform.position), -other.transform.forward, "Enemy");
             healthBar.value -= dmg;
+
+            playerMovement.PlaySound(playerMovement.playerStats.hurtSound);
 
             other.gameObject.SetActive(false);
 

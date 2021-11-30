@@ -18,6 +18,9 @@ public class PlayerStats : ScriptableObject
 
     [Header("Sounds")]
     public AudioClip dashSound;
+    public AudioClip doubleJumpSound;
+    public AudioClip ammoPickup;
+    public AudioClip hurtSound;
 
     [Header("Speeds")]
     public float movementSpeed;
